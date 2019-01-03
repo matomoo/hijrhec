@@ -1,11 +1,18 @@
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
-import RootNavigator from './RootStackNavigator';
-const SwitchNavigator = createSwitchNavigator(
+import RootStackNavigator from './RootStackNavigator';
+// import BottomTabNavigator from './BottomTabNavigator';
+import AuthStackNavigator from './AutheStackNavigator';
+import AutheLoading from '../screen/authe/AutheLoading';
+import { Switch } from 'react-native';
+
+const SwitchNavigator =  createSwitchNavigator(
   {
-    RootNavigator,
+    AuthLoading: AutheLoading,
+    App: RootStackNavigator,
+    Auth: AuthStackNavigator,
   },
   {
-    initialRouteName: 'RootNavigator',
+    initialRouteName: 'AuthLoading',
     headerMode: 'none',
   },
 );

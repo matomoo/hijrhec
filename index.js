@@ -8,6 +8,7 @@ YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
   'Warning: componentWillReceiveProps is deprecated',,
   'Module RCTImageLoader',
+  'Setting a timer for a long period'
 ]);
 
 AppRegistry.registerComponent('hijrHec', () => App);

@@ -7,16 +7,105 @@ import {
   View,
   ViewStyle,
   TextStyle,
+  ActivityIndicator,
 } from 'react-native';
+import { observer } from 'mobx-react';
+import { inject } from 'mobx-react/native';
 import { Button, Headline, IconButton, Colors,
-  Caption,
+  Caption, Card, Title, Paragraph, TouchableRipple
 } from 'react-native-paper';
-import { ratio, colors } from '../../utils/Styles';
+import * as db1 from '../../firebase/firebase';
 
 interface IStyle {
   container: ViewStyle;
   text: TextStyle;
 }
+
+interface IProps {
+  navigation?: any;
+  store: any;
+}
+
+interface IState {
+  isLoaded: boolean;
+  users: any[];
+}
+
+@inject('store') @observer
+class Screen extends Component<IProps, IState> {
+  static navigationOptions = {
+    title: 'Info',
+  };
+
+  public taskUser: any;
+
+  constructor(props) {
+    super(props);
+    this.taskUser = db1.db.ref(`users`);
+    this.state = {
+      isLoaded: false,
+      users: [],
+    };
+  }
+
+  public componentDidMount() {
+    this.getFirstData(this.taskUser);
+  }
+
+  public render() {
+    return (
+      <View style={styles.container}>
+        { this.state.isLoaded ?
+            <ActivityIndicator /> :
+            <View>
+              { this.state.users.map( (el, key) =>
+                <View key={key}>
+                  <TouchableRipple
+                    onPress={() => console.log('Pressed')}
+                    rippleColor="rgba(0, 0, 0, .32)"
+                  >
+                    <Card>
+                      <Card.Content>
+                        <Title>{el.namaLengkap}</Title>
+                        <Paragraph>{el.email}</Paragraph>
+                      </Card.Content>
+                      {/* <Card.Actions>
+                        <Button mode="outlined" onPress={() => this.onChangeRole(el)}>
+                          {el.userRole}
+                        </Button>
+                      </Card.Actions> */}
+                    </Card>
+                  </TouchableRipple>
+                </View>,
+              )}
+            </View> 
+        }
+      </View>
+    );
+  }
+
+  private async getFirstData( p ) {
+    await p
+      .on('value', (snap) => {
+      const r1 = [];
+      snap.forEach((el) => {
+        r1.push({
+          uid: el.val()._id,
+          namaLengkap: el.val().namaLengkap,
+          email: el.val().email,
+          userRole: el.val().role,
+        });
+      });
+      this.setState({
+        users: r1,
+        isLoaded: false,
+      });
+    });
+  }
+
+}
+
+export default Screen;
 
 const styles = StyleSheet.create<IStyle>({
   container: {
@@ -31,34 +120,3 @@ const styles = StyleSheet.create<IStyle>({
     color: 'black',
   },
 });
-
-class Screen extends Component<any, any> {
-  static navigationOptions = {
-    title: 'Info',
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
-  public render() {
-    return (
-      <View style={styles.container}>
-        <Headline>Headline</Headline>
-        <Caption>Caption</Caption>
-        <Text>Text</Text>
-        <Text style={styles.text}>Text with style</Text>
-        <IconButton
-          icon="add-a-photo"
-          color={Colors.red500}
-          size={20}
-          onPress={() => console.log('Pressed')}
-        />
-      </View>
-    );
-  }
-}
-
-export default Screen;
