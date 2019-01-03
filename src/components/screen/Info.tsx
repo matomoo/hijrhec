@@ -48,7 +48,8 @@ class Screen extends Component<any, any> {
       <View style={styles.container}>
         <Headline>Headline</Headline>
         <Caption>Caption</Caption>
-        <Text style={styles.text}>Screen</Text>
+        <Text>Text</Text>
+        <Text style={styles.text}>Text with style</Text>
         <IconButton
           icon="add-a-photo"
           color={Colors.red500}
