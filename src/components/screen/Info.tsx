@@ -8,8 +8,8 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { Button, Headline, IconButton, Colors
-
+import { Button, Headline, IconButton, Colors,
+  Caption,
 } from 'react-native-paper';
 import { ratio, colors } from '../../utils/Styles';
 
@@ -47,6 +47,7 @@ class Screen extends Component<any, any> {
     return (
       <View style={styles.container}>
         <Headline>Headline</Headline>
+        <Caption>Caption</Caption>
         <Text style={styles.text}>Screen</Text>
         <IconButton
           icon="add-a-photo"
