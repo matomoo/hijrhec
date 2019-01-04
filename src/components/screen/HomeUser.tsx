@@ -8,15 +8,25 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-
+import { observer } from 'mobx-react';
+import { inject } from 'mobx-react/native';
 import { ratio, colors } from '../../utils/Styles';
 
-interface IStyle {
-  container: ViewStyle;
-  text: TextStyle;
+import CpListUsers from '../screen/SysAdmin/CpListUsers';
+import CpUsers from '../screen/Users/CpUsers';
+
+interface IProps {
+  navigation?: any;
+  store: any;
 }
 
-class Screen extends Component<any, any> {
+interface IState {
+  isLoaded: boolean;
+  users: any[];
+}
+
+@inject('store') @observer
+class Screen extends Component<IProps, IState> {
   static navigationOptions = {
     title: 'Klinik Mata Hasanuddin',
   };
@@ -24,19 +34,31 @@ class Screen extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
+      isLoaded: false,
+      users: [],
     };
   }
 
   public render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Screen</Text>
+        { this.props.store.user.userRole === 'user' &&
+            <CpUsers navigation={ this.props.navigation } />
+        }
+        { this.props.store.user.userRole === 'sysadmin' &&
+            <CpListUsers navigation={ this.props.navigation } />
+        }
       </View>
     );
   }
 }
 
 export default Screen;
+
+interface IStyle {
+  container: ViewStyle;
+  text: TextStyle;
+}
 
 const styles = StyleSheet.create<IStyle>({
   container: {

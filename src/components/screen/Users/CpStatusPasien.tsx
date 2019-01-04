@@ -14,11 +14,11 @@ import { inject } from 'mobx-react/native';
 import { Button, Headline, IconButton, Colors,
   Caption, Card, Title, Paragraph, TouchableRipple
 } from 'react-native-paper';
-import * as db1 from '../../firebase/firebase';
+import * as db1 from '../../../firebase/firebase';
 
 interface IProps {
   navigation?: any;
-  store: any;
+  store?: any;
 }
 
 interface IState {
@@ -29,14 +29,14 @@ interface IState {
 @inject('store') @observer
 class Screen extends Component<IProps, IState> {
   static navigationOptions = {
-    title: 'Info',
+    title: 'Status Pasien',
   };
 
   public taskUser: any;
 
   constructor(props) {
     super(props);
-    this.taskUser = db1.db.ref(`users`);
+    this.taskUser = db1.db.ref(`users/${this.props.store.user.uid}`);
     this.state = {
       isLoaded: false,
       users: [],
@@ -45,6 +45,7 @@ class Screen extends Component<IProps, IState> {
 
   public componentDidMount() {
     this.getFirstData(this.taskUser);
+    // console.log(this.state.users);
   }
 
   public render() {
@@ -55,22 +56,26 @@ class Screen extends Component<IProps, IState> {
             <View>
               { this.state.users.map( (el, key) =>
                 <View key={key}>
-                  <TouchableRipple
+                  {/* <TouchableRipple
                     onPress={() => console.log('Pressed')}
                     rippleColor="rgba(0, 0, 0, .32)"
-                  >
+                  > */}
                     <Card>
                       <Card.Content>
-                        <Title>{el.namaLengkap}</Title>
-                        <Paragraph>{el.email}</Paragraph>
+                        <Title>Status Pasien : {(el.statusPasien)}</Title>
+                        <Paragraph>
+                          Klik untuk merubah status pasien.
+                          Perubahan hanya dapat di lakukan 1x24 jam. 
+                          Untuk pasien BPJS mohon membawa surat keterangan untuk verifikasi.
+                        </Paragraph>
                       </Card.Content>
-                      {/* <Card.Actions>
+                      <Card.Actions>
                         <Button mode="outlined" onPress={() => this.onChangeRole(el)}>
-                          {el.userRole}
+                          Ubah Status Pasien
                         </Button>
-                      </Card.Actions> */}
+                      </Card.Actions>
                     </Card>
-                  </TouchableRipple>
+                  {/* </TouchableRipple> */}
                 </View>,
               )}
             </View> 
@@ -83,19 +88,34 @@ class Screen extends Component<IProps, IState> {
     await p
       .on('value', (snap) => {
       const r1 = [];
-      snap.forEach((el) => {
+      // snap.forEach((el) => {
         r1.push({
-          uid: el.val()._id,
-          namaLengkap: el.val().namaLengkap,
-          email: el.val().email,
-          userRole: el.val().role,
+          uid: snap.val()._id,
+          namaLengkap: snap.val().namaLengkap,
+          email: snap.val().email,
+          userRole: snap.val().role,
+          statusPasien: snap.val().statusPasien,
         });
-      });
+      // });
       this.setState({
         users: r1,
         isLoaded: false,
       });
     });
+  }
+
+  private onChangeRole(p) {
+    // console.log( p );
+    if (p.uid !== 'undefined'){ 
+      if (p.statusPasien === 'BPJS') {
+        db1.db.ref('users/' + p.uid).update({
+          statusPasien: 'UMUM',
+      }) } else if (p.statusPasien === 'UMUM') {
+        db1.db.ref('users/' + p.uid).update({
+          statusPasien: 'BPJS',
+      })
+      }
+    }
   }
 
 }

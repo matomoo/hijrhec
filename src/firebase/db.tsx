@@ -16,6 +16,7 @@ export const _saveUserProfile = ( q, a, b ) => {
     statusDeposit: 'OK',
     requestVisit: 'Idle',
     userAvatar: 'https://bootdey.com/img/Content/avatar/avatar1.png',
+    statusPasien: 'bpjs',
   });
 };
 
