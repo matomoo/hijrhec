@@ -58,6 +58,10 @@ class Screen extends Component<IProps, IState> {
     this.getFirstData(this.taskUser);
   }
 
+  public componentWillUnmount() {
+    this.getFirstData(this.taskUser);
+  }
+
   public render() {
     return (
       <View style={styles.topContainer}>

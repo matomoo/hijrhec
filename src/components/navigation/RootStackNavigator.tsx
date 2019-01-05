@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator, createBottomTabNavigator, getActiveChildNavigationOptions, createAppContainer } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { observer } from 'mobx-react/native';
+import { inject, observer } from 'mobx-react/native';
 import { colors } from '../../utils/Styles';
 import appStore from '../../stores/appStore';
 import HomeUserScreen from '../screen/HomeUser';
@@ -13,6 +13,7 @@ import ProfileScreen from '../screen/Users/UserProfile';
 import InputUserProfileScreen from '../screen/Users/InputUserProfile';
 import UserChangePwdScreen from '../screen/Users/UserChangePwd';
 import UserDaftarAntrianDetailScreen from '../screen/Users/UserDaftarAntrianDetail';
+import InputItemDiagnosisScreen from '../screen/Resepsionis/InputItemDiagnosis';
 
 // Set here for tabNavigator content
 const UserBottomTabNavigator = createBottomTabNavigator(
@@ -76,6 +77,10 @@ const routeConfig = {
     screen: UserDaftarAntrianDetailScreen,
     path: 'UserDaftarAntrianDetailScreen',
   },
+  InputItemDiagnosisScreen: {
+    screen: InputItemDiagnosisScreen,
+    path: 'InputItemDiagnosisScreen',
+  },
 
 };
 
@@ -102,13 +107,15 @@ const RootStackNavigator = createStackNavigator(routeConfig, navigatorConfig);
 
 interface IProps {
   navigation: any;
+  store?;
 }
 
-@observer
+@inject('store') @observer
 class RootNavigator extends React.Component<IProps> {
   private static router = RootStackNavigator.router;
 
   public render() {
+    // console.log('stackNav', this.props.store.user.userRole);
     return <RootStackNavigator navigation={this.props.navigation}/>;
   }
 }
