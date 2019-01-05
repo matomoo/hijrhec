@@ -162,12 +162,20 @@ class Screen extends Component<IProps, IState> {
     if (p.uid !== 'undefined'){ 
       if (p.userRole === 'user') {
         db1.db.ref('users/' + p.uid).update({
-          role: 'admin',
-      }) } else if (p.userRole === 'admin') {
+          role: 'resepsionis',
+      }) } else if (p.userRole === 'resepsionis') {
+        db1.db.ref('users/' + p.uid).update({
+          role: 'dokter',
+      }) } else if (p.userRole === 'dokter') {
+        db1.db.ref('users/' + p.uid).update({
+          role: 'apotek',
+      }) } else if (p.userRole === 'apotek') {
+        db1.db.ref('users/' + p.uid).update({
+          role: 'oka',
+      }) } else if (p.userRole === 'oka') {
         db1.db.ref('users/' + p.uid).update({
           role: 'user',
-      })
-      }
+      }) }
     }
   }
 

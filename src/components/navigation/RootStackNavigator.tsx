@@ -12,6 +12,7 @@ import AppLoaderScreen from '../screen/AppLoader';
 import ProfileScreen from '../screen/Users/UserProfile';
 import InputUserProfileScreen from '../screen/Users/InputUserProfile';
 import UserChangePwdScreen from '../screen/Users/UserChangePwd';
+import UserDaftarAntrianDetailScreen from '../screen/Users/UserDaftarAntrianDetail';
 
 // Set here for tabNavigator content
 const UserBottomTabNavigator = createBottomTabNavigator(
@@ -70,6 +71,10 @@ const routeConfig = {
   HomeUserScreen: {
     screen: HomeUserScreen,
     path: 'HomeUserScreen',
+  },
+  UserDaftarAntrianDetailScreen: {
+    screen: UserDaftarAntrianDetailScreen,
+    path: 'UserDaftarAntrianDetailScreen',
   },
 
 };

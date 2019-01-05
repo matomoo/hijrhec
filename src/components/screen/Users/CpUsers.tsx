@@ -20,13 +20,12 @@ import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
 import * as db1 from '../../../firebase/firebase';
 import NumberFormat from 'react-number-format';
-// import ImagePicker from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'firebase';
 import RNFetchBlob from 'rn-fetch-blob';
 import Moment from 'moment';
 import CpStatusPasien from '../Users/CpStatusPasien';
-// import RNFS from 'react-native-fs';
+import CpDaftarAntrian from '../Users/CpDaftarAntrian';
 
 interface IProps {
   navigation?: any;
@@ -77,7 +76,8 @@ class Screen extends Component<IProps, IState> {
                     <Headline>Halo, {el.namaLengkap}</Headline>
                   </View>
                   <View style={styles.bodyContent}>
-                    <CpStatusPasien store={this.props.store}/>
+                    <CpStatusPasien />
+                    <CpDaftarAntrian navigation={ this.props.navigation } />
                   </View>
                 </View>,
               )}

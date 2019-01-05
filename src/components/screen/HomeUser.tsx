@@ -34,7 +34,7 @@ class Screen extends Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
-      isLoaded: false,
+      isLoaded: true,
       users: [],
     };
   }

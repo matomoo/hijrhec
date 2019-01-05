@@ -12,7 +12,7 @@ import {
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
 import { Button, Headline, IconButton, Colors,
-  Caption, Card, Title, Paragraph, TouchableRipple
+  Caption, Card, Title, Paragraph, TouchableRipple, Subheading
 } from 'react-native-paper';
 import * as db1 from '../../../firebase/firebase';
 
@@ -29,7 +29,7 @@ interface IState {
 @inject('store') @observer
 class Screen extends Component<IProps, IState> {
   static navigationOptions = {
-    title: 'Status Pasien',
+    title: 'Daftar Antrian',
   };
 
   public taskUser: any;
@@ -38,7 +38,7 @@ class Screen extends Component<IProps, IState> {
     super(props);
     this.taskUser = db1.db.ref(`users/${this.props.store.user.uid}`);
     this.state = {
-      isLoaded: false,
+      isLoaded: true,
       users: [],
     };
   }
@@ -53,30 +53,22 @@ class Screen extends Component<IProps, IState> {
       <View style={styles.container}>
         { this.state.isLoaded ?
             <ActivityIndicator /> :
-            <View style={{padding:10}}>
+            <View style={[{width: '100%'}, {padding:10}]}>
               { this.state.users.map( (el, key) =>
-                <View key={key}>
-                  {/* <TouchableRipple
-                    onPress={() => console.log('Pressed')}
-                    rippleColor="rgba(0, 0, 0, .32)"
-                  > */}
-                    <Card>
-                      <Card.Content>
-                        <Title>Status Pasien : {(el.statusPasien)}</Title>
-                        <Paragraph>
-                          Klik untuk merubah status pasien.
-                          Perubahan hanya dapat di lakukan 1x24 jam. 
-                          Untuk pasien BPJS mohon membawa surat keterangan untuk verifikasi.
-                        </Paragraph>
-                      </Card.Content>
-                      <Card.Actions>
-                        <Button mode="text" onPress={() => this.onChangeRole(el)}>
-                          Ubah Status Pasien
-                        </Button>
-                      </Card.Actions>
-                    </Card>
-                  {/* </TouchableRipple> */}
-                </View>,
+                  <Card key={key}>
+                    <Card.Content>
+                      <Title>Nomor Daftar Antrian : {(el.nomorAntrian)}</Title>
+                      <Subheading>Tanggal Booking : {(el.tanggalBooking)}</Subheading>
+                    </Card.Content>
+                    <Card.Actions>
+                      <Button mode="text" 
+                        onPress={() => this.onDaftarAndrian(el)}
+                        disabled={el.flagActivity === 'userIdle' ? false : true }
+                      >
+                        Daftar Antrian
+                      </Button>
+                    </Card.Actions>
+                  </Card>
               )}
             </View> 
         }
@@ -91,10 +83,9 @@ class Screen extends Component<IProps, IState> {
       // snap.forEach((el) => {
         r1.push({
           uid: snap.val()._id,
-          namaLengkap: snap.val().namaLengkap,
-          email: snap.val().email,
-          userRole: snap.val().role,
-          statusPasien: snap.val().statusPasien,
+          nomorAntrian: snap.val().nomorAntrian,
+          tanggalBooking: snap.val().tanggalBooking,
+          flagActivity: snap.val().flagActivity,
         });
       // });
       this.setState({
@@ -104,18 +95,8 @@ class Screen extends Component<IProps, IState> {
     });
   }
 
-  private onChangeRole(p) {
-    // console.log( p );
-    if (p.uid !== 'undefined'){ 
-      if (p.statusPasien === 'BPJS') {
-        db1.db.ref('users/' + p.uid).update({
-          statusPasien: 'UMUM',
-      }) } else if (p.statusPasien === 'UMUM') {
-        db1.db.ref('users/' + p.uid).update({
-          statusPasien: 'BPJS',
-      })
-      }
-    }
+  private onDaftarAndrian(p) {
+    this.props.navigation.navigate('UserDaftarAntrianDetailScreen');
   }
 
 }
@@ -134,6 +115,7 @@ const styles = StyleSheet.create<IStyle>({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    width:'100%',
   },
   text: {
     fontSize: 20,

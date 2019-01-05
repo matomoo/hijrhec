@@ -12,7 +12,7 @@ import {
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
 import { Button, Headline, IconButton, Colors,
-  Caption, Card, Title, Paragraph, TouchableRipple
+  Caption, Card, Title, Paragraph, TouchableRipple, Subheading
 } from 'react-native-paper';
 import * as db1 from '../../firebase/firebase';
 
@@ -38,13 +38,14 @@ class Screen extends Component<IProps, IState> {
     super(props);
     this.taskUser = db1.db.ref(`users`);
     this.state = {
-      isLoaded: false,
+      isLoaded: true,
       users: [],
     };
   }
 
   public componentDidMount() {
     this.getFirstData(this.taskUser);
+    // console.log(this.state.users);
   }
 
   public render() {
@@ -53,27 +54,39 @@ class Screen extends Component<IProps, IState> {
         { this.state.isLoaded ?
             <ActivityIndicator /> :
             <View>
-              { this.state.users.map( (el, key) =>
-                <View key={key}>
-                  <TouchableRipple
-                    onPress={() => console.log('Pressed')}
-                    rippleColor="rgba(0, 0, 0, .32)"
-                  >
-                    <Card>
-                      <Card.Content>
-                        <Title>{el.namaLengkap}</Title>
-                        <Paragraph>{el.email}</Paragraph>
-                      </Card.Content>
-                      {/* <Card.Actions>
-                        <Button mode="outlined" onPress={() => this.onChangeRole(el)}>
-                          {el.userRole}
-                        </Button>
-                      </Card.Actions> */}
-                    </Card>
-                  </TouchableRipple>
-                </View>,
-              )}
-            </View> 
+                <Headline>Headline</Headline>
+                <Title>Title</Title>
+                <Subheading>Subheading</Subheading>
+                <Paragraph>Paragraph</Paragraph>
+                <Caption>Caption</Caption>
+                <Text>Text</Text>
+              </View>
+            // <View>
+            //   { this.state.users.map( (el, key) =>
+            //     <View key={key}>
+            //       <Card>
+            //         <Card.Content>
+            //           <Title>{el.namaLengkap}</Title>
+            //           <Paragraph>{el.email}</Paragraph>
+            //         </Card.Content>
+            //         {/* <Card.Actions>
+            //           <Button mode="outlined" onPress={() => this.onChangeRole(el)}>
+            //             {el.userRole}
+            //           </Button>
+            //         </Card.Actions> */}
+            //       </Card>
+            //     </View>,
+            //   )}
+            //   <View>
+            //     <Title>Title</Title>
+            //     <Caption>Caption</Caption>
+            //     <Subheading>Subheading</Subheading>
+            //     <Headline>Headline</Headline>
+            //     <Paragraph>Paragraph</Paragraph>
+            //     <Subheading>Subheading</Subheading>
+            //     <Text>Text</Text>
+            //   </View>
+            // </View> 
         }
       </View>
     );
@@ -84,12 +97,14 @@ class Screen extends Component<IProps, IState> {
       .on('value', (snap) => {
       const r1 = [];
       snap.forEach((el) => {
+        // console.log(el.val());
         r1.push({
           uid: el.val()._id,
           namaLengkap: el.val().namaLengkap,
           email: el.val().email,
           userRole: el.val().role,
         });
+        // console.log(r1);
       });
       this.setState({
         users: r1,
