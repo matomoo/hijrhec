@@ -24,6 +24,7 @@ interface IProps {
 }
 
 interface IState {
+  idDiagnosa;
   namaDiagnosa;
   hargaDiagnosa;
   navQey;
@@ -34,20 +35,24 @@ class Screen extends Component<IProps, IState> {
   public static navigationOptions = {
     title: 'Input Item Diagnosis',
   };
-  private taskDiagnosa: any;
+  // private taskDiagnosa: any;
 
   constructor(props) {
     super(props);
-    this.taskDiagnosa = db1.db.ref(`diagnosa`);
+    // this.taskDiagnosa = db1.db.ref(`diagnosa`);
     this.state = {
-      namaDiagnosa : '',
-      hargaDiagnosa : '',
+      idDiagnosa : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.idDiagnosa : '',
+      namaDiagnosa : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.namaDiagnosa : '',
+      hargaDiagnosa : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.hargaDiagnosa : '',
       navQey: this.props.navigation.state.params.qey === null ? 'newData' : this.props.navigation.state.params.qey,
     };
   }
 
   public componentDidMount() {
-    this.getFirstData(this.taskDiagnosa);
+    // this.getFirstData(this.taskDiagnosa);
+    // this.getFirstData(this.props.navigation.state.params.el);
+    // console.log(this.props.navigation.state.params.el);
+    // console.log(this.state.navQey);
   }
 
   public render() {
@@ -57,12 +62,12 @@ class Screen extends Component<IProps, IState> {
         <View style={{width:'100%'}}>
           <TextInput
               mode='outlined'
-              label='Nama Lengkap'
+              label='Nama Diagnosis'
               value={this.state.namaDiagnosa}
               onChangeText={(namaDiagnosa) => this.setState({namaDiagnosa})}/>
           <TextInput
               mode='outlined'
-              label='hargaDiagnosa'
+              label='Harga Diagnosis'
               keyboardType='number-pad'
               value={this.state.hargaDiagnosa}
               onChangeText={(hargaDiagnosa) => this.setState({hargaDiagnosa})}/>
@@ -84,28 +89,37 @@ class Screen extends Component<IProps, IState> {
   }
 
   public _onSubmit() {
-    const q = this.taskDiagnosa.push();
-    db1.db.ref('diagnosa/' + q.key).update({
-      idDiagnosa: q.key,
-      namaDiagnosa: this.state.namaDiagnosa,
-      hargaDiagnosa: this.state.hargaDiagnosa,
-    });
+    if (this.state.navQey === 'newData'){
+      const q = db1.db.ref(`diagnosa`).push();
+      db1.db.ref('diagnosa/' + q.key).update({
+        idDiagnosa: q.key,
+        namaDiagnosa: this.state.namaDiagnosa,
+        hargaDiagnosa: this.state.hargaDiagnosa,
+      });
+    } else if (this.state.navQey === 'updateData') {
+      db1.db.ref('diagnosa/' + this.state.idDiagnosa).update({
+        idDiagnosa: this.state.idDiagnosa,
+        namaDiagnosa: this.state.namaDiagnosa,
+        hargaDiagnosa: this.state.hargaDiagnosa,
+      });
+    }
     this.props.navigation.navigate('HomeUserScreen');
     // console.log(this.props.navigation.state.params.qey);
   }
 
-  private async getFirstData( p ) {
-    await p.once('value', (result) => {
+  private getFirstData( p ) {
+    // p.once('value', (result) => {
       // const r1 = [];
       // r1.push(result.val());
-      // console.log(result.val());
       if (this.state.navQey === 'updateData') {
+        console.log(p);
+        // const p = this.props.navigation.state.params.el;
         this.setState({
-          namaDiagnosa : result.val().namaDiagnosa,
-          hargaDiagnosa : result.val().hargaDiagnosa,
+          namaDiagnosa : p.namaDiagnosa,
+          hargaDiagnosa : p.hargaDiagnosa,
         });
       }
-    });
+    // });
   }
 
 }

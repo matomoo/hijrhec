@@ -98,7 +98,7 @@ class Screen extends Component<IProps, IState> {
   renderHeader = () => {
     const { firstQuery } = this.state;
     return <Searchbar
-      placeholder="Cari berdasarkan nama diagnosis"
+      placeholder="Cari berdasarkan nama"
       onChangeText={text => this.searchFilterFunction(text)}
       // value={firstQuery}
       />;
@@ -111,7 +111,7 @@ class Screen extends Component<IProps, IState> {
     // <List.Item
     //   title={item.namaLengkap}
     //   description={item.email}
-    //   onPress={() => this.onSubmit(item)}
+    //   onPress={() => this.onUpdateData(item)}
     //   // left={props => <List.Icon {...props} icon="folder" />}
     // />
     <Card>
@@ -123,8 +123,11 @@ class Screen extends Component<IProps, IState> {
         {/* <Subheading>Role : {item.userRole}</Subheading> */}
       </Card.Content>
       <Card.Actions>
-        <Button mode="outlined" onPress={() => this.onSubmit(item)}>
+        <Button mode="outlined" onPress={() => this.onUpdateData(item)}>
           Ubah
+        </Button>
+        <Button mode="text" onPress={() => this.onDeleteData(item)}>
+          Hapus
         </Button>
       </Card.Actions>
     </Card>
@@ -151,14 +154,18 @@ class Screen extends Component<IProps, IState> {
     });
   }
 
-  private onSubmit (p) {
+  private onUpdateData (p) {
     // console.log( p );
-    // this.props.navigation.navigate('InputItemDiagnosisScreen', {qey:'newData'})
+    this.props.navigation.navigate('InputItemDiagnosisScreen', {qey:'updateData', el: {p}})
   }
 
   private onNewData () {
     // console.log( p );
     this.props.navigation.navigate('InputItemDiagnosisScreen', {qey:'newData'})
+  }
+
+  private onDeleteData (p) {
+    db1.db.ref('diagnosa/' + p.idDiagnosa).remove();
   }
 
 }
