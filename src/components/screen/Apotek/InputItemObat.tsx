@@ -110,7 +110,7 @@ class Screen extends Component<IProps, IState> {
         idObat: q.key,
         namaObat: this.state.namaObat,
         hargaObat: this.state.hargaObat,
-        jumlahObat: parseInt(this.state.jumlahObatPrev, 10) + parseInt(this.state.jumlahObatNext, 10),
+        jumlahObat: parseInt(this.state.jumlahObatNext, 10),
       });
     } else if (this.state.navQey === 'updateData') {
       db1.db.ref('obat/' + this.state.idObat).update({

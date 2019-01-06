@@ -175,7 +175,14 @@ class Screen extends Component<IProps, IState> {
   }
 
   private onDeleteData (p) {
-    db1.db.ref('obat/' + p.idObat).remove();
+    Alert.alert(
+      'Hapus item',
+      'Hapus item ' + p.namaObat + '?',
+      [
+        {text: 'Batal', onPress: () => console.log('Batal'), style: 'cancel'},
+        {text: 'OK', onPress: () => db1.db.ref('obat/' + p.idObat).remove()}
+      ],      
+    )
   }
 
 }
