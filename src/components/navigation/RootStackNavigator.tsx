@@ -14,6 +14,7 @@ import InputUserProfileScreen from '../screen/Users/InputUserProfile';
 import UserChangePwdScreen from '../screen/Users/UserChangePwd';
 import UserDaftarAntrianDetailScreen from '../screen/Users/UserDaftarAntrianDetail';
 import InputItemDiagnosisScreen from '../screen/Resepsionis/InputItemDiagnosis';
+import InputItemObatScreen from '../screen/Apotek/InputItemObat';
 
 // Set here for tabNavigator content
 const UserBottomTabNavigator = createBottomTabNavigator(
@@ -81,7 +82,10 @@ const routeConfig = {
     screen: InputItemDiagnosisScreen,
     path: 'InputItemDiagnosisScreen',
   },
-
+  InputItemObatScreen: {
+    screen: InputItemObatScreen,
+    path: 'InputItemObatScreen',
+  },
 };
 
 const navigatorConfig = {
