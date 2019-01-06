@@ -101,7 +101,7 @@ class Screen extends Component<IProps, IState> {
       handphone: this.state.handphone,
       alamat: this.state.alamat,
     });
-    this.props.navigation.navigate('Home');
+    this.props.navigation.navigate('HomeUserScreen');
   }
 
   private async getFirstData( p ) {

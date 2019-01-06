@@ -15,6 +15,7 @@ import UserChangePwdScreen from '../screen/Users/UserChangePwd';
 import UserDaftarAntrianDetailScreen from '../screen/Users/UserDaftarAntrianDetail';
 import InputItemDiagnosisScreen from '../screen/Resepsionis/InputItemDiagnosis';
 import InputItemObatScreen from '../screen/Apotek/InputItemObat';
+import InputShareOfPercentage from '../screen/Manajemen/InputShareOfPercentage';
 
 // Set here for tabNavigator content
 const UserBottomTabNavigator = createBottomTabNavigator(
@@ -85,6 +86,10 @@ const routeConfig = {
   InputItemObatScreen: {
     screen: InputItemObatScreen,
     path: 'InputItemObatScreen',
+  },
+  InputShareOfPercentage: {
+    screen: InputShareOfPercentage,
+    path: 'InputShareOfPercentage',
   },
 };
 

@@ -178,6 +178,9 @@ class Screen extends Component<IProps, IState> {
           role: 'oka',
       }) } else if (p.userRole === 'oka') {
         db1.db.ref('users/' + p.uid).update({
+          role: 'manajemen',
+      }) } else if (p.userRole === 'manajemen') {
+        db1.db.ref('users/' + p.uid).update({
           role: 'user',
       }) }
     }
