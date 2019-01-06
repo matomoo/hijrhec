@@ -43,11 +43,11 @@ class Screen extends Component<IProps, IState> {
     super(props);
     // this.taskDiagnosa = db1.db.ref(`diagnosa`);
     this.state = {
-      idObat : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.idObat : '',
-      namaObat : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.namaObat : '',
-      hargaObat : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.hargaObat : '',
-      jumlahObatPrev : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.jumlahObatPrev : '',
-      jumlahObatNext : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.jumlahObatNext : '',
+      idObat : this.props.navigation.state.params.qey !== 'newData' ? this.props.navigation.state.params.el.p.idObat : '',
+      namaObat : this.props.navigation.state.params.qey !== 'newData' ? this.props.navigation.state.params.el.p.namaObat : '',
+      hargaObat : this.props.navigation.state.params.qey !== 'newData' ? this.props.navigation.state.params.el.p.hargaObat : '',
+      jumlahObatPrev : this.props.navigation.state.params.qey !== 'newData' ? this.props.navigation.state.params.el.p.jumlahObat : '',
+      jumlahObatNext : '',
       navQey: this.props.navigation.state.params.qey === null ? 'newData' : this.props.navigation.state.params.qey,
     };
   }
@@ -68,20 +68,23 @@ class Screen extends Component<IProps, IState> {
             mode='outlined'
             label='Nama Obat/Resep'
             value={this.state.namaObat}
+            disabled={this.state.navQey === 'beliData' ? true : false }
             onChangeText={(namaObat) => this.setState({namaObat})}/>
           <TextInput
             mode='outlined'
             label='Harga Obat/Resep'
             keyboardType='number-pad'
             value={this.state.hargaObat}
+            disabled={this.state.navQey === 'beliData' ? true : false }
             onChangeText={(hargaObat) => this.setState({hargaObat})}/>
-          <TextInput
-            mode='outlined'
-            label='Jumlah Obat/Resep'
-            keyboardType='number-pad'
-            value={this.state.jumlahObatNext}
-            disabled={this.state.navQey === 'updateData' ? true : false }
-            onChangeText={(jumlahObatNext) => this.setState({jumlahObatNext})}/>
+          { this.state.navQey !== 'updateData' && 
+            <TextInput
+              mode='outlined'
+              label='Jumlah Obat/Resep'
+              keyboardType='number-pad'
+              value={this.state.jumlahObatNext}
+              // disabled={this.state.navQey === 'updateData' ? true : false }
+              onChangeText={(jumlahObatNext) => this.setState({jumlahObatNext})}/>}
         </View>
 
         <View style={{marginTop: 10}}>
@@ -115,6 +118,13 @@ class Screen extends Component<IProps, IState> {
         namaObat: this.state.namaObat,
         hargaObat: this.state.hargaObat,
         // jumlahObat: this.state.jumlahObat,
+      });
+    } else if (this.state.navQey === 'beliData') {
+      db1.db.ref('obat/' + this.state.idObat).update({
+        idObat: this.state.idObat,
+        namaObat: this.state.namaObat,
+        hargaObat: this.state.hargaObat,
+        jumlahObat: parseInt(this.state.jumlahObatPrev, 10) + parseInt(this.state.jumlahObatNext, 10),
       });
     }
     this.props.navigation.navigate('HomeUserScreen');

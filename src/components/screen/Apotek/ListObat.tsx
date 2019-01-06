@@ -75,12 +75,6 @@ class Screen extends Component<IProps, IState> {
             </View>
         }
         </ScrollView>
-        <View>
-          <Button mode='contained'
-            onPress={() => this.onNewData()}>
-            Tambah
-          </Button>
-        </View>
       </View>
     );
   }
@@ -122,16 +116,8 @@ class Screen extends Component<IProps, IState> {
           renderText={(value) => <Paragraph>Jumlah : {value}</Paragraph>} />
       </Card.Content>
       <Card.Actions>
-        <Button mode="outlined" style={{marginRight: 5}} onPress={() => this.onUpdateData(item)}>
-          Ubah
-        </Button>
-        <Button mode="outlined" style={{marginRight: 5}} onPress={() => this.onBeliData(item)}>
-          Beli
-        </Button>
-        <Button mode="text" 
-          color='#B71C1C'
-          onPress={() => this.onDeleteData(item)}>
-          Hapus
+        <Button mode="outlined" onPress={() => this.onUpdateData(item)}>
+          Pilih
         </Button>
       </Card.Actions>
     </Card>
@@ -162,20 +148,6 @@ class Screen extends Component<IProps, IState> {
   private onUpdateData (p) {
     // console.log( p );
     this.props.navigation.navigate('InputItemObatScreen', {qey:'updateData', el: {p}})
-  }
-
-  private onBeliData (p) {
-    // console.log( p );
-    this.props.navigation.navigate('InputItemObatScreen', {qey:'beliData', el: {p}})
-  }
-
-  private onNewData () {
-    // console.log( p );
-    this.props.navigation.navigate('InputItemObatScreen', {qey:'newData'})
-  }
-
-  private onDeleteData (p) {
-    db1.db.ref('obat/' + p.idObat).remove();
   }
 
 }
