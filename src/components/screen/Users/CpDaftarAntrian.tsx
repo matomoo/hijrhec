@@ -12,7 +12,7 @@ import {
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
 import { Button, Headline, IconButton, Colors,
-  Caption, Card, Title, Paragraph, TouchableRipple, Subheading
+  Caption, Card, Title, Paragraph, TouchableRipple, Subheading,
 } from 'react-native-paper';
 import * as db1 from '../../../firebase/firebase';
 
@@ -28,7 +28,7 @@ interface IState {
 
 @inject('store') @observer
 class Screen extends Component<IProps, IState> {
-  static navigationOptions = {
+  public static navigationOptions = {
     title: 'Daftar Antrian',
   };
 
@@ -53,7 +53,7 @@ class Screen extends Component<IProps, IState> {
       <View style={styles.container}>
         { this.state.isLoaded ?
             <ActivityIndicator /> :
-            <View style={[{width: '100%'}, {padding:10}]}>
+            <View style={[{width: '100%'}, {padding: 10}]}>
               { this.state.users.map( (el, key) =>
                   <Card key={key}>
                     <Card.Content>
@@ -61,16 +61,16 @@ class Screen extends Component<IProps, IState> {
                       <Subheading>Tanggal Booking : {(el.tanggalBooking)}</Subheading>
                     </Card.Content>
                     <Card.Actions>
-                      <Button mode="text" 
+                      <Button mode='text'
                         onPress={() => this.onDaftarAndrian(el)}
                         disabled={el.flagActivity === 'userIdle' ? false : true }
                       >
                         Daftar Antrian
                       </Button>
                     </Card.Actions>
-                  </Card>
+                  </Card>,
               )}
-            </View> 
+            </View>
         }
       </View>
     );
@@ -81,11 +81,12 @@ class Screen extends Component<IProps, IState> {
       .on('value', (snap) => {
       const r1 = [];
       // snap.forEach((el) => {
-        r1.push({
+      r1.push({
           uid: snap.val()._id,
           nomorAntrian: snap.val().nomorAntrian,
           tanggalBooking: snap.val().tanggalBooking,
           flagActivity: snap.val().flagActivity,
+          poli: 'POLI1',
         });
       // });
       this.setState({
@@ -115,7 +116,7 @@ const styles = StyleSheet.create<IStyle>({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width:'100%',
+    width: '100%',
   },
   text: {
     fontSize: 20,

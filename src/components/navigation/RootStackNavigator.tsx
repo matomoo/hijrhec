@@ -1,12 +1,13 @@
 import React from 'react';
-import { createStackNavigator, createBottomTabNavigator, getActiveChildNavigationOptions, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator,
+  getActiveChildNavigationOptions, createAppContainer } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { inject, observer } from 'mobx-react/native';
 import { colors } from '../../utils/Styles';
 import appStore from '../../stores/appStore';
-import HomeUserScreen from '../screen/HomeUser';
 import IntroScreen from '../screen/Intro';
 import NotFoundScreen from '../screen/NotFound';
+import HomeUserScreen from '../screen/HomeUser';
 import InfoScreen from '../screen/Info';
 import AppLoaderScreen from '../screen/AppLoader';
 import ProfileScreen from '../screen/Users/UserProfile';
@@ -16,6 +17,7 @@ import UserDaftarAntrianDetailScreen from '../screen/Users/UserDaftarAntrianDeta
 import InputItemDiagnosisScreen from '../screen/Resepsionis/InputItemDiagnosis';
 import InputItemObatScreen from '../screen/Apotek/InputItemObat';
 import InputShareOfPercentage from '../screen/Manajemen/InputShareOfPercentage';
+import CpListDiagnosisScreen from '../screen/Resepsionis/CpListDiagnosis';
 
 // Set here for tabNavigator content
 const UserBottomTabNavigator = createBottomTabNavigator(
@@ -90,6 +92,10 @@ const routeConfig = {
   InputShareOfPercentage: {
     screen: InputShareOfPercentage,
     path: 'InputShareOfPercentage',
+  },
+  CpListDiagnosisScreen: {
+    screen: CpListDiagnosisScreen,
+    path: 'CpListDiagnosisScreen',
   },
 };
 

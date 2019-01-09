@@ -14,7 +14,7 @@ import { ratio, colors } from '../../utils/Styles';
 
 import CpListUsers from '../screen/SysAdmin/CpListUsers';
 import CpUsers from '../screen/Users/CpUsers';
-import CpListDiagnosis from '../screen/Resepsionis/CpListDiagnosis';
+import IndexResepsionis from '../screen/Resepsionis/IndexResepsionis';
 import CpListObat from '../screen/Apotek/CpListObat';
 import InputShareOfPercentage from '../screen/Manajemen/InputShareOfPercentage';
 
@@ -30,7 +30,7 @@ interface IState {
 
 @inject('store') @observer
 class Screen extends Component<IProps, IState> {
-  static navigationOptions = {
+  public static navigationOptions = {
     title: 'Klinik Mata Hasanuddin',
   };
 
@@ -49,7 +49,7 @@ class Screen extends Component<IProps, IState> {
             <CpUsers navigation={ this.props.navigation } />
         }
         { this.props.store.user.userRole === 'resepsionis' &&
-            <CpListDiagnosis navigation={ this.props.navigation } />
+            <IndexResepsionis navigation={ this.props.navigation } />
         }
         { this.props.store.user.userRole === 'apotek' &&
             <CpListObat navigation={ this.props.navigation } />

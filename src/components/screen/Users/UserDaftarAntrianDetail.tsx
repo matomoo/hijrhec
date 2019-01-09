@@ -24,7 +24,7 @@ interface IProps {
 interface IState {
   // isLoggingIn: boolean;
   isLoaded;
-  users;
+  doks;
   PilihTanggal;
 }
 
@@ -41,7 +41,7 @@ class Screen extends Component<IProps, IState> {
     this.taskUser = db1.db.ref(`users`);
     this.state = {
       isLoaded: true,
-      users: [],
+      doks: [],
       PilihTanggal: moment(Date.now()).format('YYYY-MM-DD'),
     };
   }
@@ -69,7 +69,7 @@ class Screen extends Component<IProps, IState> {
           </View> */}
           <Button mode='contained'
             style={{marginTop: 5}}
-            onPress={()=> this._onSubmit()}
+            onPress={() => this._onSubmit()}
           >
             Submit
           </Button>
@@ -84,13 +84,13 @@ class Screen extends Component<IProps, IState> {
       .equalTo('dokter')
       .once('value', (result) => {
       const r1 = [];
-      result.forEach(element => {
+      result.forEach((element) => {
         r1.push({
           value: element.val().namaLengkap,
-          });        
+          });
       });
       this.setState({
-        users: r1,
+        doks: r1,
         // isLoaded: false,
       });
     });
@@ -115,22 +115,26 @@ class Screen extends Component<IProps, IState> {
     let latestNomorAntrianPasien = 0;
     db1.db.ref(`daftarTunggu/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}/nomorAntrianPasien`)
       .once('value', (result) => {
-        // console.log(result.val());
+        console.log(result.val());
         latestNomorAntrianPasien = result.val() === null ? 1 : result.val();
         // console.log(latestNomorAntrianPasien);
         db1.db.ref('users/' + p).update({
           flagActivity: 'antriPoliklinik',
           nomorAntrian: latestNomorAntrianPasien,
           tanggalBooking: this.state.PilihTanggal,
-        })
+        });
         db1.db.ref(`daftarTunggu/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}`).update({
           nomorAntrianPasien: latestNomorAntrianPasien + 1,
-        })
-        db1.db.ref(`daftarTunggu/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}/${latestNomorAntrianPasien}`).update({
+        });
+        db1.db.ref('daftarTunggu/' + moment(this.state.PilihTanggal).format('YYYY-MM-DD') +
+          '/' + latestNomorAntrianPasien).update({
           uid: p,
-        })
-      })
-      this.props.navigation.navigate('HomeUserScreen');
+          namaAntrian: this.props.store.user.userNamaLengkap,
+          nomorAntrian: latestNomorAntrianPasien,
+          poli: 'POLI1',
+        });
+      });
+    this.props.navigation.navigate('HomeUserScreen');
   }
 
 }
