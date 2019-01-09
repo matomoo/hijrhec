@@ -22,6 +22,7 @@ import {
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
 import * as db1 from '../../../firebase/firebase';
+import Moment from 'moment';
 
 interface IProps {
   navigation?: any;
@@ -38,7 +39,7 @@ interface IState {
 @inject('store') @observer
 class Screen extends Component<IProps, IState> {
   public static navigationOptions = {
-    title: 'Item Diagnosis',
+    title: 'Daftar Antrian',
   };
 
   public arrayholder: any[];
@@ -46,7 +47,7 @@ class Screen extends Component<IProps, IState> {
 
   constructor(props) {
     super(props);
-    this.taskUser = db1.db.ref(`diagnosa`);
+    this.taskUser = db1.db.ref('daftarTunggu/' + Moment(Date.now()).format('YYYY-MM-DD'));
     this.arrayholder = [];
     this.state = {
       isLoaded: true,
@@ -76,12 +77,6 @@ class Screen extends Component<IProps, IState> {
             </View>
         }
         </ScrollView>
-        <View>
-          <Button mode='contained'
-            onPress={() => this.onNewData()}>
-            Tambah
-          </Button>
-        </View>
       </View>
     );
   }
@@ -106,7 +101,7 @@ class Screen extends Component<IProps, IState> {
       />;
   }
 
-  public _keyExtractor = (item, index) => item.idDiagnosa;
+  public _keyExtractor = (item, index) => item.uid;
 
   public _renderItems = ({item}) => (
     // <List.Item
@@ -117,20 +112,21 @@ class Screen extends Component<IProps, IState> {
     // />
     <Card>
       <Card.Content>
-        <Title>{item.namaDiagnosa}</Title>
-        <Paragraph>{item.hargaDiagnosa}</Paragraph>
+        <Title>{item.namaAntrian}</Title>
+        <Subheading>Nomor Antrian : {item.nomorAntrian}</Subheading>
+        <Subheading>Poli : {item.poli}</Subheading>
         {/* <Caption>Caption</Caption> */}
         {/* <Divider /> */}
         {/* <Subheading>Role : {item.userRole}</Subheading> */}
       </Card.Content>
-      <Card.Actions>
+      {/* <Card.Actions>
         <Button mode='outlined' onPress={() => this.onUpdateData(item)}>
           Ubah
         </Button>
         <Button mode='text' onPress={() => this.onDeleteData(item)}>
           Hapus
         </Button>
-      </Card.Actions>
+      </Card.Actions> */}
     </Card>
   )
 
@@ -138,13 +134,17 @@ class Screen extends Component<IProps, IState> {
     await p
       .on('value', (snap) => {
       const r1 = [];
+      console.log(snap.val());
+      // console.log(Moment(Date.now()).format('YYYY-MM-DD'));
       snap.forEach((el) => {
         r1.push({
-          idDiagnosa: el.val().idDiagnosa,
-          namaDiagnosa: el.val().namaDiagnosa,
-          hargaDiagnosa: el.val().hargaDiagnosa,
+          uid : el.val().uid,
+          namaAntrian: el.val().namaAntrian,
+          nomorAntrian: el.val().nomorAntrian,
+          poli : el.val().poli,
         });
       });
+      r1.pop();
       this.setState({
         items: r1,
         isLoaded: false,
@@ -153,20 +153,6 @@ class Screen extends Component<IProps, IState> {
       // this.notif.localNotif();
       // this.props.store.user.userBadge2 = r1.length;
     });
-  }
-
-  private onUpdateData(p) {
-    // console.log( p );
-    this.props.navigation.navigate('InputItemDiagnosisScreen', {qey: 'updateData', el: {p}});
-  }
-
-  private onNewData() {
-    // console.log( p );
-    this.props.navigation.navigate('InputItemDiagnosisScreen', {qey: 'newData'});
-  }
-
-  private onDeleteData(p) {
-    db1.db.ref('diagnosa/' + p.idDiagnosa).remove();
   }
 
 }

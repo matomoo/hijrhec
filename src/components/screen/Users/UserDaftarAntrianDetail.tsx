@@ -103,7 +103,7 @@ class Screen extends Component<IProps, IState> {
         date: new Date(),
       });
       if (action !== DatePickerAndroid.dismissedAction) {
-        this.setState({ PilihTanggal : moment(`${day}/${month + 1}/${year}`).format('YYYY-MM-DD') });
+        this.setState({ PilihTanggal : moment(`${month + 1}/${day}/${year}`).format('YYYY-MM-DD') });
       }
     } catch ({code, message}) {
       console.warn('Cannot open date picker', message);

@@ -9,7 +9,8 @@ import {
   TextStyle,
 } from 'react-native';
 import CpListDiagnosis from './CpListDiagnosis';
-import { Card, Subheading, Button } from 'react-native-paper';
+import { Card, Subheading, Button,
+  Divider } from 'react-native-paper';
 
 interface IProps {
   navigation?: any;
@@ -47,6 +48,19 @@ class Screen extends Component<IProps, IState> {
                 onPress={() => this.props.navigation.navigate('CpListDiagnosisScreen')}
               >
                 Update
+              </Button>
+            </Card.Actions>
+          </Card>
+          {/* <Divider /> */}
+          <Card style={{marginTop: 5}}>
+            <Card.Content>
+              <Subheading>Daftar Antrian</Subheading>
+            </Card.Content>
+            <Card.Actions>
+              <Button mode='text'
+                onPress={() => this.props.navigation.navigate('CpListDaftarAntrianScreen')}
+              >
+                List
               </Button>
             </Card.Actions>
           </Card>
