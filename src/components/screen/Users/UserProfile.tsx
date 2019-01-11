@@ -59,31 +59,32 @@ class Screen extends Component<IProps, IState> {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <View style={[{width:'100%'}, {marginTop:10}]}>
-            <Card style={[{margin:10}]}>
-              <Card.Content>
-                { this.state.users.map( (el, key) =>
-                  <View key={key}>
-                    <Title>Nama Lengkap : { el.namaLengkap }</Title>
-                    <Title>Handphone : { el.handphone }</Title>
-                    <Title>Alamat : { el.alamat }</Title>
-                  </View>,
-                )}
-              </Card.Content>
-              <Card.Actions>
-                <Button mode='text'
-                  // style={{ marginRight: 5}}
-                  onPress={() => this.props.navigation.navigate('InputUserProfileScreen')}>
-                  Ubah user profile
-                </Button>
-                <Button mode='text'
-                  onPress={() => this.props.navigation.navigate('UserChangePwdScreen')}>
-                  Ubah password
-                </Button>
-              </Card.Actions>
-            </Card>
+          <View style={[{width: '100%'}, {marginTop: 10}]}>
+            { this.state.users.map( (el, key) =>
+              <View key={key}>
+                <Card style={[{margin: 10}]}>
+                  <Card.Cover source={{ uri: el.userAvatar} } />
+                  <Card.Content>
+                        <Title>Nama Lengkap : { el.namaLengkap }</Title>
+                        <Title>Handphone : { el.handphone }</Title>
+                        <Title>Alamat : { el.alamat }</Title>
+                  </Card.Content>
+                  <Card.Actions>
+                    <Button mode='text'
+                      // style={{ marginRight: 5}}
+                      onPress={() => this.props.navigation.navigate('InputUserProfileScreen')}>
+                      Ubah user profile
+                    </Button>
+                    <Button mode='text'
+                      onPress={() => this.props.navigation.navigate('UserChangePwdScreen')}>
+                      Ubah password
+                    </Button>
+                  </Card.Actions>
+                </Card>
+              </View>,
+            )}
           </View>
-          <View style={[{marginTop:10}]}>
+          <View style={[{marginTop: 10}]}>
             <Button mode='outlined'
               onPress={() => this._onLogout()} >
               Logout
