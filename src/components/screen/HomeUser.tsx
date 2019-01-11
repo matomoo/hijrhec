@@ -15,7 +15,7 @@ import { ratio, colors } from '../../utils/Styles';
 import CpListUsers from '../screen/SysAdmin/CpListUsers';
 import CpUsers from '../screen/Users/CpUsers';
 import IndexResepsionis from '../screen/Resepsionis/IndexResepsionis';
-import CpListObat from '../screen/Apotek/CpListObat';
+import IndexApotek from '../screen/Apotek/IndexApotek';
 import InputShareOfPercentage from '../screen/Manajemen/InputShareOfPercentage';
 
 interface IProps {
@@ -52,7 +52,7 @@ class Screen extends Component<IProps, IState> {
             <IndexResepsionis navigation={ this.props.navigation } />
         }
         { this.props.store.user.userRole === 'apotek' &&
-            <CpListObat navigation={ this.props.navigation } />
+            <IndexApotek navigation={ this.props.navigation } />
         }
         { this.props.store.user.userRole === 'manajemen' &&
             <InputShareOfPercentage navigation={ this.props.navigation } />

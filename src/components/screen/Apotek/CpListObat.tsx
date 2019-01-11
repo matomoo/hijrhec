@@ -38,10 +38,12 @@ interface IState {
 
 @inject('store') @observer
 class Screen extends Component<IProps, IState> {
+  public static navigationOptions = {
+    title: 'Daftar Obat/Resep',
+  };
 
+  private arrayholder: any[];
   private taskUser: any;
-  arrayholder: any[];
-  
 
   constructor(props) {
     super(props);
@@ -65,7 +67,7 @@ class Screen extends Component<IProps, IState> {
         <ScrollView>
         { this.state.isLoaded ?
             <ActivityIndicator /> :
-            <View style={{width:'100%'}}>
+            <View style={{width: '100%'}}>
               <FlatList
                 data={this.state.items}
                 keyExtractor={this._keyExtractor}
@@ -85,35 +87,37 @@ class Screen extends Component<IProps, IState> {
     );
   }
 
-  searchFilterFunction = text => {    
-    const newData = this.arrayholder.filter(item => {      
+  public searchFilterFunction = (text) => {
+    const newData = this.arrayholder.filter((item) => {
       const itemData = `${item.namaObat.toUpperCase()}`;
       const textData = text.toUpperCase();
-        
-       return itemData.indexOf(textData) > -1;    
-    });    
-  
-    this.setState({ items: newData });  
-  };
+      return itemData.indexOf(textData) > -1;
+    });
 
-  renderHeader = () => {
+    this.setState({ items: newData });
+  }
+
+  public renderHeader = () => {
     const { firstQuery } = this.state;
     return <Searchbar
-      placeholder="Cari berdasarkan nama"
-      onChangeText={text => this.searchFilterFunction(text)}
+      placeholder='Cari berdasarkan nama'
+      onChangeText={(text) => this.searchFilterFunction(text)}
       // value={firstQuery}
       />;
-  };
+  }
 
+  public _keyExtractor = (item, index) => item.idObat;
 
-  _keyExtractor = (item, index) => item.idObat;
-
-  _renderItems = ({item}) => (
+  public _renderItems = ({item}) => (
     <Card>
       <Card.Content>
         <Title>{item.namaObat}</Title>
         <NumberFormat
-          value={item.hargaObat}
+          value={item.hargaBeliObat}
+          displayType={'text'} thousandSeparator={true} prefix={'Rp. '}
+          renderText={(value) => <Paragraph>{value}</Paragraph>} />
+        <NumberFormat
+          value={item.hargaJualObat}
           displayType={'text'} thousandSeparator={true} prefix={'Rp. '}
           renderText={(value) => <Paragraph>{value}</Paragraph>} />
         <NumberFormat
@@ -122,20 +126,20 @@ class Screen extends Component<IProps, IState> {
           renderText={(value) => <Paragraph>Jumlah : {value}</Paragraph>} />
       </Card.Content>
       <Card.Actions>
-        <Button mode="outlined" style={{marginRight: 5}} onPress={() => this.onUpdateData(item)}>
+        <Button mode='outlined' style={{marginRight: 5}} onPress={() => this.onUpdateData(item)}>
           Ubah
         </Button>
-        <Button mode="outlined" style={{marginRight: 5}} onPress={() => this.onBeliData(item)}>
+        <Button mode='outlined' style={{marginRight: 5}} onPress={() => this.onBeliData(item)}>
           Beli
         </Button>
-        <Button mode="text" 
+        <Button mode='text'
           color='#B71C1C'
           onPress={() => this.onDeleteData(item)}>
           Hapus
         </Button>
       </Card.Actions>
     </Card>
-  );
+  )
 
   private async getFirstData( p ) {
     await p
@@ -145,7 +149,8 @@ class Screen extends Component<IProps, IState> {
         r1.push({
           idObat: el.val().idObat,
           namaObat: el.val().namaObat,
-          hargaObat: el.val().hargaObat,
+          hargaBeliObat: el.val().hargaBeliObat,
+          hargaJualObat: el.val().hargaJualObat,
           jumlahObat: el.val().jumlahObat,
         });
       });
@@ -159,30 +164,30 @@ class Screen extends Component<IProps, IState> {
     });
   }
 
-  private onUpdateData (p) {
+  private onUpdateData(p) {
     // console.log( p );
-    this.props.navigation.navigate('InputItemObatScreen', {qey:'updateData', el: {p}})
+    this.props.navigation.navigate('InputItemObatScreen', {qey: 'updateData', el: {p}});
   }
 
-  private onBeliData (p) {
+  private onBeliData(p) {
     // console.log( p );
-    this.props.navigation.navigate('InputItemObatScreen', {qey:'beliData', el: {p}})
+    this.props.navigation.navigate('InputItemObatScreen', {qey: 'beliData', el: {p}});
   }
 
-  private onNewData () {
+  private onNewData() {
     // console.log( p );
-    this.props.navigation.navigate('InputItemObatScreen', {qey:'newData'})
+    this.props.navigation.navigate('InputItemObatScreen', {qey: 'newData'});
   }
 
-  private onDeleteData (p) {
+  private onDeleteData(p) {
     Alert.alert(
       'Hapus item',
       'Hapus item ' + p.namaObat + '?',
       [
         {text: 'Batal', onPress: () => console.log('Batal'), style: 'cancel'},
-        {text: 'OK', onPress: () => db1.db.ref('obat/' + p.idObat).remove()}
-      ],      
-    )
+        {text: 'OK', onPress: () => db1.db.ref('obat/' + p.idObat).remove()},
+      ],
+    );
   }
 
 }

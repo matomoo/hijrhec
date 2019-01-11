@@ -26,7 +26,8 @@ interface IProps {
 interface IState {
   idObat;
   namaObat;
-  hargaObat;
+  hargaBeliObat;
+  hargaJualObat;
   jumlahObatPrev;
   jumlahObatNext;
   navQey;
@@ -43,10 +44,16 @@ class Screen extends Component<IProps, IState> {
     super(props);
     // this.taskDiagnosa = db1.db.ref(`diagnosa`);
     this.state = {
-      idObat : this.props.navigation.state.params.qey !== 'newData' ? this.props.navigation.state.params.el.p.idObat : '',
-      namaObat : this.props.navigation.state.params.qey !== 'newData' ? this.props.navigation.state.params.el.p.namaObat : '',
-      hargaObat : this.props.navigation.state.params.qey !== 'newData' ? this.props.navigation.state.params.el.p.hargaObat : '',
-      jumlahObatPrev : this.props.navigation.state.params.qey !== 'newData' ? this.props.navigation.state.params.el.p.jumlahObat : '',
+      idObat : this.props.navigation.state.params.qey !== 'newData' ?
+       this.props.navigation.state.params.el.p.idObat : '',
+      namaObat : this.props.navigation.state.params.qey !== 'newData' ?
+       this.props.navigation.state.params.el.p.namaObat : '',
+      hargaBeliObat : this.props.navigation.state.params.qey !== 'newData' ?
+       this.props.navigation.state.params.el.p.hargaBeliObat : '',
+      hargaJualObat : this.props.navigation.state.params.qey !== 'newData' ?
+       this.props.navigation.state.params.el.p.hargaJualObat : '',
+      jumlahObatPrev : this.props.navigation.state.params.qey !== 'newData' ?
+       this.props.navigation.state.params.el.p.jumlahObat : '',
       jumlahObatNext : '',
       navQey: this.props.navigation.state.params.qey === null ? 'newData' : this.props.navigation.state.params.qey,
     };
@@ -63,7 +70,7 @@ class Screen extends Component<IProps, IState> {
     return (
       <ScrollView>
       <View style={styles.container}>
-        <View style={{width:'100%'}}>
+        <View style={{width: '100%'}}>
           <TextInput
             mode='outlined'
             label='Nama Obat/Resep'
@@ -72,12 +79,19 @@ class Screen extends Component<IProps, IState> {
             onChangeText={(namaObat) => this.setState({namaObat})}/>
           <TextInput
             mode='outlined'
-            label='Harga Obat/Resep'
+            label='Harga Beli Obat/Resep'
             keyboardType='number-pad'
-            value={this.state.hargaObat}
+            value={this.state.hargaBeliObat}
             disabled={this.state.navQey === 'beliData' ? true : false }
-            onChangeText={(hargaObat) => this.setState({hargaObat})}/>
-          { this.state.navQey !== 'updateData' && 
+            onChangeText={(hargaBeliObat) => this.setState({hargaBeliObat})}/>
+          <TextInput
+            mode='outlined'
+            label='Harga Jual Obat/Resep'
+            keyboardType='number-pad'
+            value={this.state.hargaJualObat}
+            disabled={this.state.navQey === 'beliData' ? true : false }
+            onChangeText={(hargaJualObat) => this.setState({hargaJualObat})}/>
+          { this.state.navQey !== 'updateData' &&
             <TextInput
               mode='outlined'
               label='Jumlah Obat/Resep'
@@ -90,7 +104,8 @@ class Screen extends Component<IProps, IState> {
         <View style={{marginTop: 10}}>
           <Button mode='contained'
             disabled={this.state.namaObat === '' ||
-                        this.state.hargaObat === '' ||
+                        this.state.hargaBeliObat === '' ||
+                        this.state.hargaJualObat === '' ||
                         this.state.jumlahObatNext === ''
                         ? true : false }
             onPress={() => this._onSubmit()} >
@@ -104,26 +119,29 @@ class Screen extends Component<IProps, IState> {
   }
 
   public _onSubmit() {
-    if (this.state.navQey === 'newData'){
+    if (this.state.navQey === 'newData') {
       const q = db1.db.ref(`obat`).push();
       db1.db.ref('obat/' + q.key).update({
         idObat: q.key,
         namaObat: this.state.namaObat,
-        hargaObat: this.state.hargaObat,
+        hargaBeliObat: this.state.hargaBeliObat,
+        hargaJualObat: this.state.hargaJualObat,
         jumlahObat: parseInt(this.state.jumlahObatNext, 10),
       });
     } else if (this.state.navQey === 'updateData') {
       db1.db.ref('obat/' + this.state.idObat).update({
         idObat: this.state.idObat,
         namaObat: this.state.namaObat,
-        hargaObat: this.state.hargaObat,
+        hargaBeliObat: this.state.hargaBeliObat,
+        hargaJualObat: this.state.hargaJualObat,
         // jumlahObat: this.state.jumlahObat,
       });
     } else if (this.state.navQey === 'beliData') {
       db1.db.ref('obat/' + this.state.idObat).update({
         idObat: this.state.idObat,
         namaObat: this.state.namaObat,
-        hargaObat: this.state.hargaObat,
+        hargaBeliObat: this.state.hargaBeliObat,
+        hargaJualObat: this.state.hargaJualObat,
         jumlahObat: parseInt(this.state.jumlahObatPrev, 10) + parseInt(this.state.jumlahObatNext, 10),
       });
     }
@@ -140,7 +158,7 @@ class Screen extends Component<IProps, IState> {
         // const p = this.props.navigation.state.params.el;
         this.setState({
           namaObat : p.namaObat,
-          hargaObat : p.hargaObat,
+          hargaBeliObat : p.hargaBeliObat,
         });
       }
     // });
