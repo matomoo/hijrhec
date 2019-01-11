@@ -20,6 +20,7 @@ import InputShareOfPercentage from '../screen/Manajemen/InputShareOfPercentage';
 import CpListDiagnosisScreen from '../screen/Resepsionis/CpListDiagnosis';
 import CpListDaftarAntrianScreen from '../screen/Resepsionis/CpListDaftarAntrian';
 import CpListObatScreen from '../screen/Apotek/CpListObat';
+import CpListDaftarAntrianByDokterScreen from '../screen/Dokter/CpListDaftarAntrianByDokter';
 
 // Set here for tabNavigator content
 const UserBottomTabNavigator = createBottomTabNavigator(
@@ -106,6 +107,10 @@ const routeConfig = {
   CpListObatScreen: {
     screen: CpListObatScreen,
     path: 'CpListObatScreen',
+  },
+  CpListDaftarAntrianByDokterScreen: {
+    screen: CpListDaftarAntrianByDokterScreen,
+    path: 'CpListDaftarAntrianByDokterScreen',
   },
 };
 

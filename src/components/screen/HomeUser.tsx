@@ -17,6 +17,7 @@ import CpUsers from '../screen/Users/CpUsers';
 import IndexResepsionis from '../screen/Resepsionis/IndexResepsionis';
 import IndexApotek from '../screen/Apotek/IndexApotek';
 import InputShareOfPercentage from '../screen/Manajemen/InputShareOfPercentage';
+import IndexDokter from '../screen/Dokter/IndexDokter';
 
 interface IProps {
   navigation?: any;
@@ -56,6 +57,9 @@ class Screen extends Component<IProps, IState> {
         }
         { this.props.store.user.userRole === 'manajemen' &&
             <InputShareOfPercentage navigation={ this.props.navigation } />
+        }
+        { this.props.store.user.userRole === 'dokter' &&
+            <IndexDokter navigation={ this.props.navigation } />
         }
         { this.props.store.user.userRole === 'sysadmin' &&
             <CpListUsers navigation={ this.props.navigation } />
