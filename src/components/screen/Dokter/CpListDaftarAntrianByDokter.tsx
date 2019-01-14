@@ -47,7 +47,7 @@ class Screen extends Component<IProps, IState> {
 
   constructor(props) {
     super(props);
-    this.taskUser = db1.db.ref('daftarTunggu/' + Moment(Date.now()).format('YYYY-MM-DD'));
+    this.taskUser = db1.db.ref('daftarTunggu/byDates/' + Moment(Date.now()).format('YYYY-MM-DD'));
     this.arrayholder = [];
     this.state = {
       isLoaded: true,
@@ -115,6 +115,7 @@ class Screen extends Component<IProps, IState> {
         <Title>{item.namaAntrian}</Title>
         <Subheading>Nomor Antrian : {item.nomorAntrian}</Subheading>
         <Subheading>Poli : {item.poli}</Subheading>
+        <Subheading>Tanggal Booking : {item.tanggalBooking}</Subheading>
         {/* <Caption>Caption</Caption> */}
         {/* <Divider /> */}
         {/* <Subheading>Role : {item.userRole}</Subheading> */}
@@ -142,9 +143,10 @@ class Screen extends Component<IProps, IState> {
           namaAntrian: el.val().namaAntrian,
           nomorAntrian: el.val().nomorAntrian,
           poli : el.val().poli,
+          tanggalBooking: el.val().tanggalBooking,
         });
       });
-      r1.pop();
+      // r1.pop();
       this.setState({
         items: r1,
         isLoaded: false,

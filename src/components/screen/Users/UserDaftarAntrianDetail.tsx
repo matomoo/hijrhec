@@ -113,7 +113,7 @@ class Screen extends Component<IProps, IState> {
   private _onSubmit() {
     const p = this.props.store.user.uid;
     let latestNomorAntrianPasien = 0;
-    db1.db.ref(`daftarTunggu/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}/nomorAntrianPasien`)
+    db1.db.ref(`daftarTunggu/indexes/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}/nomorAntrianPasien`)
       .once('value', (result) => {
         // console.log(result.val());
         latestNomorAntrianPasien = result.val() === null ? 1 : result.val();
@@ -123,19 +123,47 @@ class Screen extends Component<IProps, IState> {
           nomorAntrian: latestNomorAntrianPasien,
           tanggalBooking: this.state.PilihTanggal,
         });
-        db1.db.ref(`daftarTunggu/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}`).update({
+        db1.db.ref(`daftarTunggu/indexes/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}`).update({
           nomorAntrianPasien: latestNomorAntrianPasien + 1,
         });
-        db1.db.ref('daftarTunggu/' + moment(this.state.PilihTanggal).format('YYYY-MM-DD') +
+        db1.db.ref('daftarTunggu/byDates/' + moment(this.state.PilihTanggal).format('YYYY-MM-DD') +
           '/' + latestNomorAntrianPasien).update({
           uid: p,
           namaAntrian: this.props.store.user.userNamaLengkap,
           nomorAntrian: latestNomorAntrianPasien,
           poli: 'POLI1',
+          tanggalBooking: moment(this.state.PilihTanggal).format('YYYY-MM-DD'),
         });
       });
     this.props.navigation.navigate('HomeUserScreen');
   }
+
+  // private _onSubmitOldOk() {
+  //   const p = this.props.store.user.uid;
+  //   let latestNomorAntrianPasien = 0;
+  //   db1.db.ref(`daftarTunggu/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}/nomorAntrianPasien`)
+  //     .once('value', (result) => {
+  //       // console.log(result.val());
+  //       latestNomorAntrianPasien = result.val() === null ? 1 : result.val();
+  //       // console.log(latestNomorAntrianPasien);
+  //       db1.db.ref('users/' + p).update({
+  //         flagActivity: 'antriPoliklinik',
+  //         nomorAntrian: latestNomorAntrianPasien,
+  //         tanggalBooking: this.state.PilihTanggal,
+  //       });
+  //       db1.db.ref(`daftarTunggu/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}`).update({
+  //         nomorAntrianPasien: latestNomorAntrianPasien + 1,
+  //       });
+  //       db1.db.ref('daftarTunggu/' + moment(this.state.PilihTanggal).format('YYYY-MM-DD') +
+  //         '/' + latestNomorAntrianPasien).update({
+  //         uid: p,
+  //         namaAntrian: this.props.store.user.userNamaLengkap,
+  //         nomorAntrian: latestNomorAntrianPasien,
+  //         poli: 'POLI1',
+  //       });
+  //     });
+  //   this.props.navigation.navigate('HomeUserScreen');
+  // }
 
 }
 

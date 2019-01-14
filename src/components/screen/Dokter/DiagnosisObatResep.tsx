@@ -11,6 +11,7 @@ import {
 import {
   List, Card, Title, Paragraph, Button,
   Caption, Subheading, Divider, Searchbar, Headline,
+  Modal, Portal,
 } from 'react-native-paper';
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
@@ -28,6 +29,7 @@ interface IState {
   items: any;
   itemsRekamMedik;
   qeyUid;
+  modDiagnosisVisible;
 }
 
 @inject('store') @observer
@@ -43,6 +45,7 @@ class Screen extends Component<IProps, IState> {
       qeyUid: this.props.navigation.state.params.qey.el.uid,
       items: [],
       itemsRekamMedik: [],
+      modDiagnosisVisible: false,
     };
   }
 
@@ -53,11 +56,22 @@ class Screen extends Component<IProps, IState> {
   public render() {
     return (
       <View style={styles.container}>
+        <Portal>
+          <Modal visible={this.state.modDiagnosisVisible} onDismiss={this._hideModal}>
+            <Text>Example Modal</Text>
+          </Modal>
+        </Portal>
+        <Button onPress={() => this._showModal()}>
+          Show Diagnosis
+        </Button>
         <Headline>Diagnosis</Headline>
         <Headline>Resep/Obat</Headline>
       </View>
     );
   }
+
+  private _showModal = () => this.setState({ modDiagnosisVisible: true });
+  private _hideModal = () => this.setState({ modDiagnosisVisible: false });
 
   private async getFirstData( p ) {
     if (p !== null ) {

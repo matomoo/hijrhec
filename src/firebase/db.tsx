@@ -19,7 +19,7 @@ export const _saveUserProfile = ( q, a, b ) => {
     statusPasien: 'BPJS',
     nomorAntrian: 'NA',
     tanggalBooking: 'NA',
-    flagActivity: 'userIdle'
+    flagActivity: 'userIdle',
   });
 };
 
@@ -133,7 +133,8 @@ export const _saveUserProfile = ( q, a, b ) => {
 //   });
 // };
 
-// export const doApotekBarangMasukxxInput = ( namaABM, jumlahABM, hargaBeliABM, hargaJualABM, satuanABM, jenisABM ) => {
+// export const doApotekBarangMasukxxInput =
+// ( namaABM, jumlahABM, hargaBeliABM, hargaJualABM, satuanABM, jenisABM ) => {
 //   const id = db.ref(`apotekBarangMasuk`).push();
 //   const key = id.key;
 //   db.ref(`apotekBarangMasuk/${key}`).update ({
