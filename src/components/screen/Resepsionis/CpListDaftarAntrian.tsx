@@ -47,7 +47,8 @@ class Screen extends Component<IProps, IState> {
 
   constructor(props) {
     super(props);
-    this.taskUser = db1.db.ref('daftarTunggu/byDates/' + Moment(Date.now()).format('YYYY-MM-DD'));
+    // this.taskUser = db1.db.ref('daftarTunggu/byDates/' + Moment(Date.now()).format('YYYY-MM-DD'));
+    this.taskUser = db1.db.ref('daftarTunggu/byDates/');
     this.arrayholder = [];
     this.state = {
       isLoaded: true,
