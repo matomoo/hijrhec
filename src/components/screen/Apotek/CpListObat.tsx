@@ -152,6 +152,7 @@ class Screen extends Component<IProps, IState> {
           hargaBeliObat: el.val().hargaBeliObat,
           hargaJualObat: el.val().hargaJualObat,
           jumlahObat: el.val().jumlahObat,
+          kodeBPJS: el.val().kodeBPJS,
         });
       });
       this.setState({

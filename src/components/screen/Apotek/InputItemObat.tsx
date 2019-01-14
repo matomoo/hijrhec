@@ -17,6 +17,7 @@ import { Button, Headline, IconButton, Colors,
 import * as db1 from '../../../firebase/firebase';
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
+import Moment from 'moment';
 
 interface IProps {
   navigation?: any;
@@ -30,6 +31,7 @@ interface IState {
   hargaJualObat;
   jumlahObatPrev;
   jumlahObatNext;
+  kodeBPJS;
   navQey;
 }
 
@@ -54,6 +56,8 @@ class Screen extends Component<IProps, IState> {
        this.props.navigation.state.params.el.p.hargaJualObat : '',
       jumlahObatPrev : this.props.navigation.state.params.qey !== 'newData' ?
        this.props.navigation.state.params.el.p.jumlahObat : '',
+      kodeBPJS : this.props.navigation.state.params.qey !== 'newData' ?
+       this.props.navigation.state.params.el.p.kodeBPJS : '',
       jumlahObatNext : '',
       navQey: this.props.navigation.state.params.qey === null ? 'newData' : this.props.navigation.state.params.qey,
     };
@@ -77,6 +81,12 @@ class Screen extends Component<IProps, IState> {
             value={this.state.namaObat}
             disabled={this.state.navQey === 'beliData' ? true : false }
             onChangeText={(namaObat) => this.setState({namaObat})}/>
+          <TextInput
+            mode='outlined'
+            label='Kode BPJS'
+            value={this.state.kodeBPJS}
+            disabled={this.state.navQey === 'beliData' ? true : false }
+            onChangeText={(kodeBPJS) => this.setState({kodeBPJS})}/>
           <TextInput
             mode='outlined'
             label='Harga Beli Obat/Resep'
@@ -127,6 +137,16 @@ class Screen extends Component<IProps, IState> {
         hargaBeliObat: this.state.hargaBeliObat,
         hargaJualObat: this.state.hargaJualObat,
         jumlahObat: parseInt(this.state.jumlahObatNext, 10),
+        kodeBPJS: this.state.kodeBPJS,
+      });
+      db1.db.ref('historyBarangMasuk/').push({
+        idObat: q.key,
+        namaObat: this.state.namaObat,
+        hargaBeliObat: this.state.hargaBeliObat,
+        hargaJualObat: this.state.hargaJualObat,
+        jumlahObat: parseInt(this.state.jumlahObatNext, 10),
+        kodeBPJS: this.state.kodeBPJS,
+        tanggalBeli: Moment(Date.now()).format('YYYY-MM-DD'),
       });
     } else if (this.state.navQey === 'updateData') {
       db1.db.ref('obat/' + this.state.idObat).update({
@@ -134,6 +154,7 @@ class Screen extends Component<IProps, IState> {
         namaObat: this.state.namaObat,
         hargaBeliObat: this.state.hargaBeliObat,
         hargaJualObat: this.state.hargaJualObat,
+        kodeBPJS: this.state.kodeBPJS,
         // jumlahObat: this.state.jumlahObat,
       });
     } else if (this.state.navQey === 'beliData') {
@@ -143,6 +164,16 @@ class Screen extends Component<IProps, IState> {
         hargaBeliObat: this.state.hargaBeliObat,
         hargaJualObat: this.state.hargaJualObat,
         jumlahObat: parseInt(this.state.jumlahObatPrev, 10) + parseInt(this.state.jumlahObatNext, 10),
+        kodeBPJS: this.state.kodeBPJS,
+      });
+      db1.db.ref('historyBarangMasuk').push({
+        idObat: this.state.idObat,
+        namaObat: this.state.namaObat,
+        hargaBeliObat: this.state.hargaBeliObat,
+        hargaJualObat: this.state.hargaJualObat,
+        jumlahObat: parseInt(this.state.jumlahObatNext, 10),
+        kodeBPJS: this.state.kodeBPJS,
+        tanggalBeli: Moment(Date.now()).format('YYYY-MM-DD'),
       });
     }
     this.props.navigation.navigate('HomeUserScreen');

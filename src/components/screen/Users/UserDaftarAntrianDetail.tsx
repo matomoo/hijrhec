@@ -115,7 +115,7 @@ class Screen extends Component<IProps, IState> {
     let latestNomorAntrianPasien = 0;
     db1.db.ref(`daftarTunggu/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}/nomorAntrianPasien`)
       .once('value', (result) => {
-        console.log(result.val());
+        // console.log(result.val());
         latestNomorAntrianPasien = result.val() === null ? 1 : result.val();
         // console.log(latestNomorAntrianPasien);
         db1.db.ref('users/' + p).update({
