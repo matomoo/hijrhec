@@ -17,7 +17,7 @@
     "android": "node node_modules/react-native/local-cli/cli.js run-android",
     "android:shake": "adb shell input keyevent 82",
     "android:log": "adb logcat '*:S' ReactNative:V ReactNativeJS:V",
-    "android:apk": "android && ./gradlew assembleRelease",
+    "android:apk": "cd android && ./gradlew assembleRelease",
     "android:release": "node node_modules/react-native/local-cli/cli.js run-android --variant=release",
     "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
     "ios:release": "node node_modules/react-native/local-cli/cli.js run-ios --configuration Release",

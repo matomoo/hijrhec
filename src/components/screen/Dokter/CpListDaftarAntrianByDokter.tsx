@@ -119,14 +119,14 @@ class Screen extends Component<IProps, IState> {
         {/* <Divider /> */}
         {/* <Subheading>Role : {item.userRole}</Subheading> */}
       </Card.Content>
-      {/* <Card.Actions>
+      <Card.Actions>
         <Button mode='outlined' onPress={() => this.onUpdateData(item)}>
-          Ubah
+          Proses
         </Button>
-        <Button mode='text' onPress={() => this.onDeleteData(item)}>
+        {/* <Button mode='text' onPress={() => this.onDeleteData(item)}>
           Hapus
-        </Button>
-      </Card.Actions> */}
+        </Button> */}
+      </Card.Actions>
     </Card>
   )
 
@@ -134,7 +134,7 @@ class Screen extends Component<IProps, IState> {
     await p
       .on('value', (snap) => {
       const r1 = [];
-      console.log(snap.val());
+      // console.log(snap.val());
       // console.log(Moment(Date.now()).format('YYYY-MM-DD'));
       snap.forEach((el) => {
         r1.push({
@@ -153,6 +153,10 @@ class Screen extends Component<IProps, IState> {
       // this.notif.localNotif();
       // this.props.store.user.userBadge2 = r1.length;
     });
+  }
+
+  private onUpdateData(p) {
+    this.props.navigation.navigate('PasienRekamMedikByDokterScreen', {qey: {p}} );
   }
 
 }

@@ -41,9 +41,12 @@ class Screen extends Component<IProps, IState> {
     super(props);
     // this.taskDiagnosa = db1.db.ref(`diagnosa`);
     this.state = {
-      idDiagnosa : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.idDiagnosa : '',
-      namaDiagnosa : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.namaDiagnosa : '',
-      hargaDiagnosa : this.props.navigation.state.params.qey === 'updateData' ? this.props.navigation.state.params.el.p.hargaDiagnosa : '',
+      idDiagnosa : this.props.navigation.state.params.qey === 'updateData' ?
+       this.props.navigation.state.params.el.p.idDiagnosa : '',
+      namaDiagnosa : this.props.navigation.state.params.qey === 'updateData' ?
+       this.props.navigation.state.params.el.p.namaDiagnosa : '',
+      hargaDiagnosa : this.props.navigation.state.params.qey === 'updateData' ?
+       this.props.navigation.state.params.el.p.hargaDiagnosa : '',
       navQey: this.props.navigation.state.params.qey === null ? 'newData' : this.props.navigation.state.params.qey,
     };
   }
@@ -59,7 +62,7 @@ class Screen extends Component<IProps, IState> {
     return (
       <ScrollView>
       <View style={styles.container}>
-        <View style={{width:'100%'}}>
+        <View style={{width: '100%'}}>
           <TextInput
               mode='outlined'
               label='Nama Diagnosis'
@@ -89,7 +92,7 @@ class Screen extends Component<IProps, IState> {
   }
 
   public _onSubmit() {
-    if (this.state.navQey === 'newData'){
+    if (this.state.navQey === 'newData') {
       const q = db1.db.ref(`diagnosa`).push();
       db1.db.ref('diagnosa/' + q.key).update({
         idDiagnosa: q.key,
@@ -112,7 +115,7 @@ class Screen extends Component<IProps, IState> {
       // const r1 = [];
       // r1.push(result.val());
       if (this.state.navQey === 'updateData') {
-        console.log(p);
+        // console.log(p);
         // const p = this.props.navigation.state.params.el;
         this.setState({
           namaDiagnosa : p.namaDiagnosa,

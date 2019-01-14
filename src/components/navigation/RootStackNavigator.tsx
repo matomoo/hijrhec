@@ -21,6 +21,8 @@ import CpListDiagnosisScreen from '../screen/Resepsionis/CpListDiagnosis';
 import CpListDaftarAntrianScreen from '../screen/Resepsionis/CpListDaftarAntrian';
 import CpListObatScreen from '../screen/Apotek/CpListObat';
 import CpListDaftarAntrianByDokterScreen from '../screen/Dokter/CpListDaftarAntrianByDokter';
+import PasienRekamMedikByDokterScreen from '../screen/Dokter/PasienRekamMedikByDokter';
+import DiagnosisResepObatScreen from '../screen/Dokter/DiagnosisObatResep';
 
 // Set here for tabNavigator content
 const UserBottomTabNavigator = createBottomTabNavigator(
@@ -33,13 +35,13 @@ const UserBottomTabNavigator = createBottomTabNavigator(
         // title: 'Dzikr App', // setting header title on its screen
       },
     },
-    Intro: { screen: InfoScreen,
-      navigationOptions: () => ({
-        tabBarLabel: 'Info',
-        tabBarIcon: (() => (<Icon name='info-circle' size={30}/>) ),
-        tabBarVisible: true,
-      }),
-    },
+    // Intro: { screen: InfoScreen,
+    //   navigationOptions: () => ({
+    //     tabBarLabel: 'Info',
+    //     tabBarIcon: (() => (<Icon name='info-circle' size={30}/>) ),
+    //     tabBarVisible: true,
+    //   }),
+    // },
     ProfileScreen: { screen: ProfileScreen,
       navigationOptions: () => ({
         tabBarLabel: 'Profil',
@@ -111,6 +113,14 @@ const routeConfig = {
   CpListDaftarAntrianByDokterScreen: {
     screen: CpListDaftarAntrianByDokterScreen,
     path: 'CpListDaftarAntrianByDokterScreen',
+  },
+  PasienRekamMedikByDokterScreen: {
+    screen: PasienRekamMedikByDokterScreen,
+    path: 'PasienRekamMedikByDokterScreen',
+  },
+  DiagnosisResepObatScreen: {
+    screen: DiagnosisResepObatScreen,
+    path: 'DiagnosisResepObatScreen',
   },
 };
 
