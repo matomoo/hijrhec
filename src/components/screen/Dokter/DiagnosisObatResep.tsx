@@ -11,7 +11,7 @@ import {
 import {
   List, Card, Title, Paragraph, Button,
   Caption, Subheading, Divider, Searchbar, Headline,
-  Modal, Portal,
+  Modal, Portal, Surface,
 } from 'react-native-paper';
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
@@ -58,7 +58,9 @@ class Screen extends Component<IProps, IState> {
       <View style={styles.container}>
         <Portal>
           <Modal visible={this.state.modDiagnosisVisible} onDismiss={this._hideModal}>
-            <Text>Example Modal</Text>
+            <Surface style={styles.containerModal}>
+              <Text>Example Modal</Text>
+            </Surface>
           </Modal>
         </Portal>
         <Button onPress={() => this._showModal()}>
@@ -92,6 +94,7 @@ export default Screen;
 
 interface IStyle {
   container: ViewStyle;
+  containerModal: ViewStyle;
 }
 
 const styles = StyleSheet.create<IStyle>({
@@ -100,6 +103,14 @@ const styles = StyleSheet.create<IStyle>({
     backgroundColor: 'transparent',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 5,
+  },
+  containerModal: {
+    flex: 1,
+    // backgroundColor: 'transparent',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     padding: 5,
   },
