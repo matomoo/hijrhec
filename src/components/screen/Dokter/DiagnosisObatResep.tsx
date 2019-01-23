@@ -20,6 +20,7 @@ import { inject } from 'mobx-react/native';
 import * as db1 from '../../../firebase/firebase';
 import Moment from 'moment';
 import ListObat from './ListObat';
+import { db } from 'src/firebase';
 
 interface IProps {
   navigation?: any;
@@ -34,12 +35,12 @@ interface IState {
   itemsDiagTerpilih;
   itemsObatTerpilih;
   // jumlahObatKeluar;
-  items: any;
+  itemsPasien;
   itemsRekamMedik;
   qeyUid;
   modDiagnosisVisible;
   modObatVisible;
-  dummState;
+  // dummState;
 }
 
 @inject('store') @observer
@@ -58,11 +59,11 @@ class Screen extends Component<IProps, IState> {
       itemsObatTerpilih: [],
       // jumlahObatKeluar: '',
       qeyUid: this.props.navigation.state.params.qey.el.uid,
-      items: [],
+      itemsPasien: this.props.navigation.state.params.qey.el,
       itemsRekamMedik: [],
       modDiagnosisVisible: false,
       modObatVisible: false,
-      dummState: 1,
+      // dummState: 1,
     };
   }
 
@@ -118,44 +119,61 @@ class Screen extends Component<IProps, IState> {
             </Surface>
           </Modal>
         </Portal>
-        <Button onPress={() => this._showModalDiag()}>
-          + Diagnosis
-        </Button>
-        <Button onPress={() => this._showModalObat()}>
-          + Resep/Obat
-        </Button>
-        <ScrollView>
-          <View style={styles.containerModal}>
-            <View style={{marginBottom: 10}}>
-              <Headline>Diagnosis</Headline>
-                { this.state.itemsDiagTerpilih.map((elx1, key) =>
-                  <View style={styles.containerItems2} key={key}>
-                    <IconButton
-                      icon='clear'
-                      color={Colors.red500}
-                      size={20}
-                      onPress={() => this._onDeleteDiag(elx1)}
-                    />
-                    <Subheading>{elx1.namaDiagnosa}</Subheading>
-                  </View>,
-                )}
-            </View>
+        <View style={{width: '100%'}}>
+          <ScrollView>
             <View>
-              <Headline>Resep/Obat</Headline>
-              { this.state.itemsObatTerpilih.map((elx2, key) =>
-                  <View style={styles.containerItems2} key={key}>
-                    <IconButton
-                      icon='clear'
-                      color={Colors.red500}
-                      size={20}
-                      onPress={() => this._onDeleteObat(elx2)}
-                    />
-                    <Subheading>{elx2.namaObat} - [ {elx2.jumlahObatKeluar} ]</Subheading>
-                  </View>,
-                )}
+              <Card>
+                <Card.Content>
+                  <Subheading>{this.state.itemsPasien.namaLengkap}</Subheading>
+                  <Caption>Pasien {this.state.itemsPasien.statusPasien}</Caption>
+                </Card.Content>
+                <Card.Actions>
+                  <Button style={{marginRight: 5}} onPress={() => this._showModalDiag()}>
+                    + Diagnosis
+                  </Button>
+                  <Button style={{marginRight: 5}} onPress={() => this._showModalObat()}>
+                    + Resep/Obat
+                  </Button>
+                  <Button disabled={(this.state.itemsDiagTerpilih.length &&
+                    !!this.state.itemsObatTerpilih.length) ? false : true }
+                    mode='contained' onPress={() => this._simpanData()}>
+                    Simpan Data
+                  </Button>
+                </Card.Actions>
+              </Card>
+              <View style={styles.containerModal}>
+                <View style={{marginBottom: 10}}>
+                  <Headline>Diagnosis</Headline>
+                    { this.state.itemsDiagTerpilih.map((elx1, key) =>
+                      <View style={styles.containerItems2} key={key}>
+                        <IconButton
+                          icon='clear'
+                          color={Colors.red500}
+                          size={20}
+                          onPress={() => this._onDeleteDiag(elx1)}
+                        />
+                        <Subheading>{elx1.namaDiagnosa}</Subheading>
+                      </View>,
+                    )}
+                </View>
+                <View>
+                  <Headline>Resep/Obat</Headline>
+                  { this.state.itemsObatTerpilih.map((elx2, key) =>
+                      <View style={styles.containerItems2} key={key}>
+                        <IconButton
+                          icon='clear'
+                          color={Colors.red500}
+                          size={20}
+                          onPress={() => this._onDeleteObat(elx2)}
+                        />
+                        <Subheading>{elx2.namaObat} - [ {elx2.jumlahObatKeluar} ]</Subheading>
+                      </View>,
+                    )}
+                </View>
+              </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </View>
     );
   }
@@ -250,11 +268,44 @@ class Screen extends Component<IProps, IState> {
     // this.setState({ dummState: 2 });
   }
 
-  private _keyExtractor = (item) => item.idObat;
-
-  private _renderItems = ({item}) => (
-    <Subheading>{item.namaObat} - [ {item.jumlahObatKeluar} ]</Subheading>
-  )
+  private _simpanData = () => {
+    db1.db.ref('rekamMedik').push({
+      idUser : this.state.itemsPasien._id,
+      namaUser : this.state.itemsPasien.namaLengkap,
+      statusUser : this.state.itemsPasien.statusPasien,
+      itemDiag : JSON.stringify(this.state.itemsDiagTerpilih),
+      itemObat : JSON.stringify(this.state.itemsObatTerpilih),
+      tanggalRekamMedik : Moment(Date.now()).format('YYYY-MM-DD'),
+      idDokter : this.props.store.user.uid,
+      namaDokter : this.props.store.user.userNamaLengkap,
+    });
+    this.state.itemsObatTerpilih.forEach((el) => {
+      const a = db1.db.ref('historyBarangKeluar').push();
+      db1.db.ref('historyBarangKeluar/' + a.key).update({
+        idObat: el.idObat,
+        namaObat: el.namaObat,
+        jumlahObatStok: el.jumlahObat,
+        jumlahObatKeluar: el.jumlahObatKeluar,
+        hargaBeliObat: el.hargaBeliObat,
+        hargaJualObat: el.hargaJualObat,
+        tanggalBarangKeluar : Moment(Date.now()).format('YYYY-MM-DD'),
+      });
+      db1.db.ref('obat/' + el.idObat).update({
+        jumlahObat : parseInt(el.jumlahObat, 10) - parseInt(el.jumlahObatKeluar, 10),
+      });
+      db1.db.ref('manajemen/user/' + this.props.store.user.uid + '/detail/' + a.key).update({
+        idDokter: this.props.store.user.uid,
+        tanggalBarangKeluar: Moment(Date.now()).format('YYYY-MM-DD'),
+        namaDokter: this.props.store.user.userNamaLengkap,
+        idHistoryBarangKeluar: a.key,
+      });
+    });
+    db1.db.ref('users/' + this.state.itemsPasien._id).update({
+      flagActivity: 'antriApotekBilling',
+    });
+    // this.props.navigation.navigate('HomeUserScreen');
+    // console.log(this.state.itemsObatTerpilih);
+  }
 
 }
 
@@ -275,6 +326,7 @@ const styles = StyleSheet.create<IStyle>({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     padding: 5,
+    width: '100%',
   },
   containerModal: {
     flex: 1,
