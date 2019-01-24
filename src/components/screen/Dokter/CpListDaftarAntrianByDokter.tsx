@@ -47,7 +47,7 @@ class Screen extends Component<IProps, IState> {
 
   constructor(props) {
     super(props);
-    this.taskUser = db1.db.ref('daftarTunggu/byDates/');
+    this.taskUser = db1.db.ref('daftarTunggu/byDates');
     this.arrayholder = [];
     this.state = {
       isLoaded: true,
@@ -101,7 +101,7 @@ class Screen extends Component<IProps, IState> {
       />;
   }
 
-  public _keyExtractor = (item, index) => item.uid;
+  public _keyExtractor = (item, index) => item.idAntrian;
 
   public _renderItems = ({item}) => (
     // <List.Item
@@ -139,6 +139,7 @@ class Screen extends Component<IProps, IState> {
       // console.log(Moment(Date.now()).format('YYYY-MM-DD'));
       snap.forEach((el) => {
         r1.push({
+          idAntrian: el.val().idAntrian,
           uid : el.val().uid,
           namaAntrian: el.val().namaAntrian,
           nomorAntrian: el.val().nomorAntrian,

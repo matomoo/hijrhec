@@ -28,6 +28,7 @@ interface IState {
   items: any;
   itemsRekamMedik;
   qeyUid;
+  qeyAntrian;
 }
 
 @inject('store') @observer
@@ -41,6 +42,7 @@ class Screen extends Component<IProps, IState> {
     this.state = {
       isLoaded: true,
       qeyUid: this.props.navigation.state.params.qey.p.uid,
+      qeyAntrian: this.props.navigation.state.params.qey.p.idAntrian,
       items: [],
       itemsRekamMedik: [],
     };
@@ -51,18 +53,20 @@ class Screen extends Component<IProps, IState> {
   }
 
   public render() {
+    const { qeyAntrian } = this.state;
     return (
       <View style={styles.container}>
         {this.state.items.map((el, key) =>
           <View key={key} style={{width: '100%'}}>
             <Card>
               <Card.Content>
-                <Title>{el.namaLengkap}</Title>
-                <Subheading>{el.handphone}</Subheading>
+                <Subheading>{el.namaLengkap}</Subheading>
+                <Caption>{el.statusPasien}</Caption>
               </Card.Content>
               <Card.Actions>
                 <Button mode='outlined'
-                  onPress={() => this.props.navigation.navigate('DiagnosisResepObatScreen' , {qey : {el}})}
+                  onPress={() => this.props.navigation.navigate('DiagnosisResepObatScreen',
+                    {qey : {el}, qey2: {qeyAntrian}})}
                 >Diagnosis + Resep/Obat</Button>
               </Card.Actions>
             </Card>
@@ -74,7 +78,16 @@ class Screen extends Component<IProps, IState> {
             {!!el2 ?
               <Card>
                 <Card.Content>
-                  <Subheading>{el2.tanggalPeriksa}</Subheading>
+                  <Subheading>{el2.tanggalRekamMedik}</Subheading>
+                  <Caption>{el2.namaDokter}</Caption>
+                  <Caption>Diagnosa</Caption>
+                  {JSON.parse(el2.itemDiag).map((item1, key) =>
+                    <Caption key={key}>- {item1.namaDiagnosa}</Caption>,
+                  )}
+                  <Caption>Resep/obat</Caption>
+                  {JSON.parse(el2.itemObat).map((item2, key) =>
+                    <Caption key={key}>- {item2.namaObat} - [ {item2.jumlahObatKeluar} ]</Caption>,
+                  )}
                 </Card.Content>
               </Card>
               : <Subheading>Tidak ada data</Subheading>
@@ -97,10 +110,19 @@ class Screen extends Component<IProps, IState> {
         });
       });
     }
-    await db1.db.ref('historyRekamMedik/' + p )
+    await db1.db.ref('rekamMedik' ).orderByChild('idUser').equalTo(p)
       .on('value', (snap2) => {
       const r2 = [];
-      r2.push(snap2.val());
+      // r2.push(snap2.val());
+      snap2.forEach((el2) => {
+        r2.push({
+          tanggalRekamMedik: el2.val().tanggalRekamMedik,
+          namaDokter: el2.val().namaDokter,
+          itemDiag: el2.val().itemDiag,
+          itemObat: el2.val().itemObat,
+        });
+      });
+      console.log(snap2.val());
       this.setState({
         itemsRekamMedik: r2,
         isLoaded: false,

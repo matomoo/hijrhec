@@ -126,7 +126,9 @@ class Screen extends Component<IProps, IState> {
         db1.db.ref(`daftarTunggu/indexes/${moment(this.state.PilihTanggal).format('YYYY-MM-DD')}`).update({
           nomorAntrianPasien: latestNomorAntrianPasien + 1,
         });
-        db1.db.ref('daftarTunggu/byDates/').push({
+        const a = db1.db.ref('daftarTunggu/byDates/').push();
+        db1.db.ref('daftarTunggu/byDates/' + a.key).update({
+          idAntrian: a.key,
           uid: p,
           namaAntrian: this.props.store.user.userNamaLengkap,
           nomorAntrian: latestNomorAntrianPasien,

@@ -61,6 +61,7 @@ class Screen extends Component<IProps, IState> {
       itemsObatTerpilih: [],
       // jumlahObatKeluar: '',
       qeyUid: this.props.navigation.state.params.qey.el.uid,
+      // qeyAntrian: this.props.navigation.state.params.qey.el.uid,
       itemsPasien: this.props.navigation.state.params.qey.el,
       itemsRekamMedik: [],
       modDiagnosisVisible: false,
@@ -73,6 +74,7 @@ class Screen extends Component<IProps, IState> {
 
   public componentDidMount() {
     this.getFirstData(this.state.qeyUid);
+    // console.log(this.props.navigation.state.params);
   }
 
   public render() {
@@ -235,10 +237,19 @@ class Screen extends Component<IProps, IState> {
         });
       });
 
-      await db1.db.ref('manajemen/percentageOfShare/' + this.props.store.user.uid + '/share' )
+      await db1.db.ref('manajemen/user/' + this.props.store.user.uid + '/share' )
       .on('value', (snapX4) => {
         const rX1 = [];
-        rX1.push(snapX4.val());
+        if (snapX4.val() !== null ) {
+          rX1.push(snapX4.val());
+        } else {
+          rX1.push({
+            shareBelanjaModal: 0,
+            shareJasaMedik: 0,
+            shareSaham: 0,
+            shareSarana: 0,
+          });
+        }
         // console.log(rX1);
         this.setState({
           itemsPercentagePerUser: rX1,
@@ -322,27 +333,43 @@ class Screen extends Component<IProps, IState> {
         tanggalBarangKeluar: Moment(Date.now()).format('YYYY-MM-DD'),
         idDokter: this.props.store.user.uid,
         namaDokter: this.props.store.user.userNamaLengkap,
-        shareBarangKeluar: parseInt(el.jumlahObatKeluar, 10) *
+        detailBelanjaModal: parseInt(el.jumlahObatKeluar, 10) *
                               (parseInt(el.hargaJualObat, 10) - parseInt(el.hargaBeliObat, 10)) *
                               parseInt( this.state.itemsPercentage[0].belanjaModal, 10) / 100,
-        shareJasaMedik: parseInt(el.jumlahObatKeluar, 10) *
+        detailJasaMedik: parseInt(el.jumlahObatKeluar, 10) *
                               (parseInt(el.hargaJualObat, 10) - parseInt(el.hargaBeliObat, 10)) *
                               parseInt( this.state.itemsPercentage[0].jasaMedik, 10) / 100,
-        saham: parseInt(el.jumlahObatKeluar, 10) *
+        detailSaham: parseInt(el.jumlahObatKeluar, 10) *
                               (parseInt(el.hargaJualObat, 10) - parseInt(el.hargaBeliObat, 10)) *
                               parseInt( this.state.itemsPercentage[0].saham, 10) / 100,
-        sarana: parseInt(el.jumlahObatKeluar, 10) *
+        detailSarana: parseInt(el.jumlahObatKeluar, 10) *
                               (parseInt(el.hargaJualObat, 10) - parseInt(el.hargaBeliObat, 10)) *
                               parseInt( this.state.itemsPercentage[0].sarana, 10) / 100,
       });
-      
-      // console.log((parseInt(el.jumlahObat, 10) - parseInt(el.jumlahObatKeluar, 10)) *
-      //   (parseInt(el.hargaJualObat, 10)) * parseInt( this.state.itemsPercentage[0].belanjaModal, 10) / 100);
+      db1.db.ref('manajemen/user/' + this.props.store.user.uid + '/share').update({
+        shareBelanjaModal: parseInt(this.state.itemsPercentagePerUser[0].shareBelanjaModal, 10) +
+                              (parseInt(el.jumlahObatKeluar, 10) *
+                              (parseInt(el.hargaJualObat, 10) - parseInt(el.hargaBeliObat, 10)) *
+                              parseInt( this.state.itemsPercentage[0].belanjaModal, 10) / 100),
+        shareJasaMedik: parseInt(this.state.itemsPercentagePerUser[0].shareJasaMedik, 10) +
+                              (parseInt(el.jumlahObatKeluar, 10) *
+                              (parseInt(el.hargaJualObat, 10) - parseInt(el.hargaBeliObat, 10)) *
+                              parseInt( this.state.itemsPercentage[0].jasaMedik, 10) / 100),
+        shareSaham: parseInt(this.state.itemsPercentagePerUser[0].shareSaham, 10) +
+                              (parseInt(el.jumlahObatKeluar, 10) *
+                              (parseInt(el.hargaJualObat, 10) - parseInt(el.hargaBeliObat, 10)) *
+                              parseInt( this.state.itemsPercentage[0].saham, 10) / 100),
+        shareSarana: parseInt(this.state.itemsPercentagePerUser[0].shareSarana, 10) +
+                              (parseInt(el.jumlahObatKeluar, 10) *
+                              (parseInt(el.hargaJualObat, 10) - parseInt(el.hargaBeliObat, 10)) *
+                              parseInt( this.state.itemsPercentage[0].sarana, 10) / 100),
+      });
     });
     db1.db.ref('users/' + this.state.itemsPasien._id).update({
       flagActivity: 'antriApotekBilling',
     });
-    // this.props.navigation.navigate('HomeUserScreen');
+    db1.db.ref('daftarTunggu/byDates/' + this.props.navigation.state.params.qey2.qeyAntrian).remove();
+    this.props.navigation.navigate('HomeUserScreen');
   }
 
 }
