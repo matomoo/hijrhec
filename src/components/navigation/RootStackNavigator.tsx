@@ -4,9 +4,9 @@ import { createStackNavigator, createBottomTabNavigator,
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { inject, observer } from 'mobx-react/native';
 import { colors } from '../../utils/Styles';
-import appStore from '../../stores/appStore';
-import IntroScreen from '../screen/Intro';
-import NotFoundScreen from '../screen/NotFound';
+// import appStore from '../../stores/appStore';
+// import IntroScreen from '../screen/Intro';
+// import NotFoundScreen from '../screen/NotFound';
 import HomeUserScreen from '../screen/HomeUser';
 import InfoScreen from '../screen/Info';
 import AppLoaderScreen from '../screen/AppLoader';
@@ -23,8 +23,9 @@ import CpListObatScreen from '../screen/Apotek/CpListObat';
 import CpListDaftarAntrianByDokterScreen from '../screen/Dokter/CpListDaftarAntrianByDokter';
 import PasienRekamMedikByDokterScreen from '../screen/Dokter/PasienRekamMedikByDokter';
 import DiagnosisResepObatScreen from '../screen/Dokter/DiagnosisObatResep';
+import CpListApotekBillingScreen from '../screen/Apotek/CpLListApotekBilling';
+import DetailApotekBillingScreen from '../screen/Apotek/DetailApotekBilling';
 
-// Set here for tabNavigator content
 const UserBottomTabNavigator = createBottomTabNavigator(
   {
     HomeUserScreen: { screen: HomeUserScreen,
@@ -121,6 +122,14 @@ const routeConfig = {
   DiagnosisResepObatScreen: {
     screen: DiagnosisResepObatScreen,
     path: 'DiagnosisResepObatScreen',
+  },
+  CpListApotekBillingScreen: {
+    screen: CpListApotekBillingScreen,
+    path: 'CpListApotekBillingScreen',
+  },
+  DetailApotekBillingScreen: {
+    screen: DetailApotekBillingScreen,
+    path: 'DetailApotekBillingScreen',
   },
 };
 

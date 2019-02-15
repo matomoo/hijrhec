@@ -77,6 +77,12 @@ class Screen extends Component<IProps, IState> {
     // console.log(this.props.navigation.state.params);
   }
 
+  public componentWillUnmount() {
+    db1.db.ref('diagnosa').off();
+    db1.db.ref('obat' ).off();
+    db1.db.ref('manajemen' ).off();
+  }
+
   public render() {
     return (
       <View style={styles.container}>
@@ -259,9 +265,6 @@ class Screen extends Component<IProps, IState> {
   }
 
   private _onPilihDiag = (p) => {
-    // this.state.itemsDiagTerpilih.push(p);
-    // console.log(this.state.itemsDiagTerpilih.includes(p));
-    // this.setState({ dummState: 2 });
     if (!this.state.itemsDiagTerpilih.includes(p)) {
       this.state.itemsDiagTerpilih.push(p);
     }
@@ -269,17 +272,12 @@ class Screen extends Component<IProps, IState> {
   }
 
   private _onPilihObat = (p) => {
-    // console.log(p);
-    // this.setState({ dummState: 2 });
     if (!this.state.itemsObatTerpilih.includes(p)) {
       this.state.itemsObatTerpilih.push(p);
     } else {
       this.state.itemsObatTerpilih.pop(p);
-      // p.jumlahObatKeluar = 0;
       p.jumlahObatKeluar ++;
       this.state.itemsObatTerpilih.push(p);
-      // console.log(p);
-      // console.log(this.state.itemsObatTerpilih);
     }
   }
 
@@ -289,8 +287,6 @@ class Screen extends Component<IProps, IState> {
     this.setState({
       itemsDiagTerpilih : b,
     });
-    // this.setState({ dummState: 2 });
-    // console.log(this.state.itemsDiagTerpilih);
   }
 
   private _onDeleteObat = (p) => {
@@ -300,7 +296,6 @@ class Screen extends Component<IProps, IState> {
     this.setState({
       itemsObatTerpilih : b,
     });
-    // this.setState({ dummState: 2 });
   }
 
   private _simpanData = () => {
@@ -313,6 +308,7 @@ class Screen extends Component<IProps, IState> {
       tanggalRekamMedik : Moment(Date.now()).format('YYYY-MM-DD'),
       idDokter : this.props.store.user.uid,
       namaDokter : this.props.store.user.userNamaLengkap,
+      statusApotekBilling : 'ApotekBillingNOK'
     });
     this.state.itemsObatTerpilih.forEach((el) => {
       const a = db1.db.ref('historyBarangKeluar').push();

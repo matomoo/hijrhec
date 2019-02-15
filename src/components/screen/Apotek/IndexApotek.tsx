@@ -51,18 +51,18 @@ class Screen extends Component<IProps, IState> {
               </Button>
             </Card.Actions>
           </Card>
-          {/* <Card style={{marginTop: 5}}>
+          <Card style={{marginTop: 5}}>
             <Card.Content>
-              <Subheading>Daftar Antrian</Subheading>
+              <Subheading>List Pasien</Subheading>
             </Card.Content>
             <Card.Actions>
               <Button mode='text'
-                onPress={() => this.props.navigation.navigate('CpListDaftarAntrianScreen')}
+                onPress={() => this.props.navigation.navigate('CpListApotekBillingScreen')}
               >
-                List
+                Lihat
               </Button>
             </Card.Actions>
-          </Card> */}
+          </Card>
         </View>
       </View>
     );
