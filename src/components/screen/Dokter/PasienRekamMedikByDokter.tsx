@@ -7,6 +7,7 @@ import {
   View,
   ViewStyle,
   TextStyle,
+  ScrollView,
 } from 'react-native';
 import {
   List, Card, Title, Paragraph, Button,
@@ -55,47 +56,50 @@ class Screen extends Component<IProps, IState> {
   public render() {
     const { qeyAntrian } = this.state;
     return (
-      <View style={styles.container}>
-        {this.state.items.map((el, key) =>
-          <View key={key} style={{width: '100%'}}>
-            <Card>
-              <Card.Content>
-                <Subheading>{el.namaLengkap}</Subheading>
-                <Caption>{el.statusPasien}</Caption>
-              </Card.Content>
-              <Card.Actions>
-                <Button mode='outlined'
-                  onPress={() => this.props.navigation.navigate('DiagnosisResepObatScreen',
-                    {qey : {el}, qey2: {qeyAntrian}})}
-                >Diagnosis + Resep/Obat</Button>
-              </Card.Actions>
-            </Card>
-          </View>,
-        )}
-        <Headline>History Rekam Medik</Headline>
-        {this.state.itemsRekamMedik.map((el2, key2) =>
-          <View key={key2} style={{width: '100%'}}>
-            {!!el2 ?
+        <View style={styles.container}>
+          {this.state.items.map((el, key) =>
+            <View key={key} style={{width: '100%'}}>
               <Card>
                 <Card.Content>
-                  <Subheading>{el2.tanggalRekamMedik}</Subheading>
-                  <Caption>{el2.namaDokter}</Caption>
-                  <Caption>Diagnosa</Caption>
-                  {JSON.parse(el2.itemDiag).map((item1, key) =>
-                    <Caption key={key}>- {item1.namaDiagnosa}</Caption>,
-                  )}
-                  <Caption>Resep/obat</Caption>
-                  {JSON.parse(el2.itemObat).map((item2, key) =>
-                    <Caption key={key}>- {item2.namaObat} - [ {item2.jumlahObatKeluar} ]</Caption>,
-                  )}
+                  <Subheading>{el.namaLengkap}</Subheading>
+                  <Caption>{el.statusPasien}</Caption>
                 </Card.Content>
+                <Card.Actions>
+                  <Button mode='outlined'
+                    onPress={() => this.props.navigation.navigate('DiagnosisResepObatScreen',
+                      {qey : {el}, qey2: {qeyAntrian}})}
+                  >Diagnosis + Resep/Obat</Button>
+                </Card.Actions>
               </Card>
-              : <Subheading>Tidak ada data</Subheading>
-            }
-          </View>,
+            </View>,
           )}
+          <Headline>History Rekam Medik</Headline>
+          <ScrollView style={{width: '100%'}}>
+          {this.state.itemsRekamMedik.map((el2, key2) =>
+            <View key={key2} style={{width: '100%'}}>
+              {!!el2 ?
+                <Card>
+                  <Card.Content>
+                    <Subheading>{el2.tanggalRekamMedik}</Subheading>
+                    <Caption>{el2.namaDokter}</Caption>
+                    <Caption>Diagnosa</Caption>
+                    {JSON.parse(el2.itemDiag).map((item1, key) =>
+                      <Caption key={key}>- {item1.namaDiagnosa}</Caption>,
+                    )}
+                    <Caption>Resep/obat</Caption>
+                    {JSON.parse(el2.itemObat).map((item2, key) =>
+                      <Caption key={key}>- {item2.namaObat} - [ {item2.jumlahObatKeluar} ]</Caption>,
+                    )}
+                  </Card.Content>
+                </Card>
+                : <Subheading>Tidak ada data</Subheading>
+              }
+            </View>,
+            )}
+            </ScrollView>
 
-      </View>
+        </View>
+      // </ScrollView>
     );
   }
 
@@ -122,7 +126,7 @@ class Screen extends Component<IProps, IState> {
           itemObat: el2.val().itemObat,
         });
       });
-      console.log(snap2.val());
+      // console.log(snap2.val());
       this.setState({
         itemsRekamMedik: r2,
         isLoaded: false,

@@ -8,7 +8,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import CpListDaftarAntrianByDokter from './CpListDaftarAntrianByDokter';
+// import CpListPasien from './CpListPasien';
 import { Card, Subheading, Button,
   Divider } from 'react-native-paper';
 
@@ -25,7 +25,7 @@ interface IState {
 // @inject('store') @observer
 class Screen extends Component<IProps, IState> {
   public static navigationOptions = {
-    title: 'Index Resepsionis',
+    title: 'Kamar Operasi',
   };
 
   constructor(props) {
@@ -41,11 +41,11 @@ class Screen extends Component<IProps, IState> {
         <View style={{width: '100%'}}>
           <Card>
             <Card.Content>
-              <Subheading>List Daftar Antrian</Subheading>
+              <Subheading>List Pasien</Subheading>
             </Card.Content>
             <Card.Actions>
               <Button mode='text'
-                onPress={() => this.props.navigation.navigate('CpListDaftarAntrianByDokterScreen')}
+                onPress={() => this.props.navigation.navigate('CpListPasienKamarOperasiScreen')}
               >
                 Lihat
               </Button>
@@ -53,13 +53,13 @@ class Screen extends Component<IProps, IState> {
           </Card>
           {/* <Card style={{marginTop: 5}}>
             <Card.Content>
-              <Subheading>Daftar Antrian</Subheading>
+              <Subheading>List Pasien</Subheading>
             </Card.Content>
             <Card.Actions>
               <Button mode='text'
-                onPress={() => this.props.navigation.navigate('CpListDaftarAntrianScreen')}
+                onPress={() => this.props.navigation.navigate('CpListApotekBillingScreen')}
               >
-                List
+                Lihat
               </Button>
             </Card.Actions>
           </Card> */}

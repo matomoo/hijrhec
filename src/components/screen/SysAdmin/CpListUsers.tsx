@@ -40,8 +40,7 @@ interface IState {
 class Screen extends Component<IProps, IState> {
 
   private taskUser: any;
-  arrayholder: any[];
-  
+  private arrayholder: any[];
 
   constructor(props) {
     super(props);
@@ -59,7 +58,7 @@ class Screen extends Component<IProps, IState> {
   }
 
   public componentWillUnmount() {
-    this.getFirstData(this.taskUser);
+    this.taskUser.off();
   }
 
   public render() {
@@ -69,7 +68,7 @@ class Screen extends Component<IProps, IState> {
         <ScrollView>
         { this.state.isLoaded ?
             <ActivityIndicator /> :
-            <View style={{width:'100%'}}>
+            <View style={{width: '100%'}}>
               <FlatList
                 data={this.state.users}
                 keyExtractor={this._keyExtractor}
@@ -83,28 +82,16 @@ class Screen extends Component<IProps, IState> {
     );
   }
 
-  searchFilterFunction = text => {    
-    const newData = this.arrayholder.filter(item => {      
-      const itemData = `${item.email.toUpperCase()}`;
-      const textData = text.toUpperCase();
-        
-       return itemData.indexOf(textData) > -1;    
-    });    
-  
-    this.setState({ users: newData });  
-  };
-
-  renderHeader = () => {
+  public renderHeader = () => {
     const { firstQuery } = this.state;
     return <Searchbar
-      placeholder="Cari berdasarkan email"
-      onChangeText={text => this.searchFilterFunction(text)}
+      placeholder='Cari berdasarkan email'
+      onChangeText={(text) => this.searchFilterFunction(text)}
       // value={firstQuery}
       />;
-  };
+  }
 
-
-  _keyExtractor = (item, index) => item.uid;
+  public _keyExtractor = (item, index) => item.uid;
 
   // _renderItem = ({item}) => (
   //   // <TouchableOpacity onPress={this._onPress}>
@@ -116,7 +103,7 @@ class Screen extends Component<IProps, IState> {
   //     // </TouchableOpacity>
   // );
 
-  _renderItems = ({item}) => (
+  public _renderItems = ({item}) => (
     // <List.Item
     //   title={item.namaLengkap}
     //   description={item.email}
@@ -132,12 +119,23 @@ class Screen extends Component<IProps, IState> {
         {/* <Subheading>Role : {item.userRole}</Subheading> */}
       </Card.Content>
       <Card.Actions>
-        <Button mode="outlined" onPress={() => this.onChangeRole(item)}>
+        <Button mode='outlined' onPress={() => this.onChangeRole(item)}>
           {item.userRole}
         </Button>
       </Card.Actions>
     </Card>
-  );
+  )
+
+  private searchFilterFunction = (text) => {
+    const newData = this.arrayholder.filter((item) => {
+      const itemData = `${item.email.toUpperCase()}`;
+      const textData = text.toUpperCase();
+
+      return itemData.indexOf(textData) > -1;
+    });
+
+    this.setState({ users: newData });
+  }
 
   private async getFirstData( p ) {
     await p
@@ -161,28 +159,28 @@ class Screen extends Component<IProps, IState> {
     });
   }
 
-  private onChangeRole (p) {
+  private onChangeRole(p) {
     // console.log( p );
-    if (p.uid !== 'undefined'){ 
+    if (p.uid !== 'undefined') {
       if (p.userRole === 'user') {
         db1.db.ref('users/' + p.uid).update({
           role: 'resepsionis',
-      }) } else if (p.userRole === 'resepsionis') {
+      }); } else if (p.userRole === 'resepsionis') {
         db1.db.ref('users/' + p.uid).update({
           role: 'dokter',
-      }) } else if (p.userRole === 'dokter') {
+      }); } else if (p.userRole === 'dokter') {
         db1.db.ref('users/' + p.uid).update({
           role: 'apotek',
-      }) } else if (p.userRole === 'apotek') {
+      }); } else if (p.userRole === 'apotek') {
         db1.db.ref('users/' + p.uid).update({
           role: 'oka',
-      }) } else if (p.userRole === 'oka') {
+      }); } else if (p.userRole === 'oka') {
         db1.db.ref('users/' + p.uid).update({
           role: 'manajemen',
-      }) } else if (p.userRole === 'manajemen') {
+      }); } else if (p.userRole === 'manajemen') {
         db1.db.ref('users/' + p.uid).update({
           role: 'user',
-      }) }
+      }); }
     }
   }
 

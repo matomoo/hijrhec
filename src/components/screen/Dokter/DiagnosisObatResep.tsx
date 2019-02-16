@@ -8,6 +8,7 @@ import {
   ViewStyle,
   TextStyle,
   FlatList,
+  DatePickerAndroid,
 } from 'react-native';
 import { ScrollView } from 'react-native';
 import {
@@ -21,6 +22,7 @@ import * as db1 from '../../../firebase/firebase';
 import Moment from 'moment';
 import ListObat from './ListObat';
 import { db } from 'src/firebase';
+import DaftarKamarOperasi from './DaftarKamarOperasi';
 
 interface IProps {
   navigation?: any;
@@ -34,7 +36,6 @@ interface IState {
   itemsObat;
   itemsDiagTerpilih;
   itemsObatTerpilih;
-  // jumlahObatKeluar;
   itemsPasien;
   itemsRekamMedik;
   qeyUid;
@@ -42,7 +43,8 @@ interface IState {
   modObatVisible;
   itemsPercentage;
   itemsPercentagePerUser;
-  // dummState;
+  pilihTanggal;
+  masukKamarOperasi;
 }
 
 @inject('store') @observer
@@ -59,22 +61,22 @@ class Screen extends Component<IProps, IState> {
       itemsObat: [],
       itemsDiagTerpilih: [],
       itemsObatTerpilih: [],
-      // jumlahObatKeluar: '',
-      qeyUid: this.props.navigation.state.params.qey.el.uid,
-      // qeyAntrian: this.props.navigation.state.params.qey.el.uid,
+      qeyUid: '',
       itemsPasien: this.props.navigation.state.params.qey.el,
       itemsRekamMedik: [],
       modDiagnosisVisible: false,
       modObatVisible: false,
       itemsPercentage: [],
       itemsPercentagePerUser: [],
-      // dummState: 1,
+      pilihTanggal: '', // Moment(Date.now()).format('YYYY-MM-DD'),
+      masukKamarOperasi: false,
     };
   }
 
   public componentDidMount() {
-    this.getFirstData(this.state.qeyUid);
+    this.getFirstData(this.props.navigation.state.params.qey.el.uid);
     // console.log(this.props.navigation.state.params);
+    // console.log(this.state.qeyUid);
   }
 
   public componentWillUnmount() {
@@ -139,18 +141,31 @@ class Screen extends Component<IProps, IState> {
                   <Subheading>{this.state.itemsPasien.namaLengkap}</Subheading>
                   <Caption>Pasien {this.state.itemsPasien.statusPasien}</Caption>
                 </Card.Content>
-                <Card.Actions>
-                  <Button style={{marginRight: 5}} onPress={() => this._showModalDiag()}>
-                    + Diagnosis
-                  </Button>
-                  <Button style={{marginRight: 5}} onPress={() => this._showModalObat()}>
-                    + Resep/Obat
-                  </Button>
-                  <Button disabled={(this.state.itemsDiagTerpilih.length &&
-                    !!this.state.itemsObatTerpilih.length) ? false : true }
-                    mode='contained' onPress={() => this._simpanData()}>
-                    Simpan Data
-                  </Button>
+                <Card.Actions style={{flexDirection: 'column'}}>
+                  <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                    <Button onPress={() => this._showModalDiag()}>
+                      + Diagnosis
+                    </Button>
+                    <Button onPress={() => this._showModalObat()}>
+                      + Resep/Obat
+                    </Button>
+                    <Button disabled={(this.state.itemsDiagTerpilih.length &&
+                      !!this.state.itemsObatTerpilih.length) ? false : true }
+                      mode='contained' onPress={() => this._simpanData()}>
+                      Simpan Data
+                    </Button>
+                  </View>
+                  <View style={{marginTop: 5, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                    <Button
+                      mode='outlined'
+                      onPress={() => this._onDateTap()}
+                    >
+                      Booking Kamar Operasi {this.state.pilihTanggal}
+                    </Button>
+                    {/* <Button mode='outlined' onPress={() => this._onSubmit()}>
+                      Booking
+                    </Button> */}
+                  </View>
                 </Card.Actions>
               </Card>
               <View style={styles.containerModal}>
@@ -308,7 +323,7 @@ class Screen extends Component<IProps, IState> {
       tanggalRekamMedik : Moment(Date.now()).format('YYYY-MM-DD'),
       idDokter : this.props.store.user.uid,
       namaDokter : this.props.store.user.userNamaLengkap,
-      statusApotekBilling : 'ApotekBillingNOK'
+      statusApotekBilling : 'ApotekBillingNOK',
     });
     this.state.itemsObatTerpilih.forEach((el) => {
       const a = db1.db.ref('historyBarangKeluar').push();
@@ -364,9 +379,50 @@ class Screen extends Component<IProps, IState> {
     db1.db.ref('users/' + this.state.itemsPasien._id).update({
       flagActivity: 'antriApotekBilling',
     });
+    const p = this.state.itemsPasien._id;
+    let latestNomorAntrianPasien = 0;
+    db1.db.ref(
+      `daftarTungguKamarOperasi/indexes/${Moment(this.state.pilihTanggal).format('YYYY-MM-DD')}/nomorAntrianPasien`)
+      .once('value', (result) => {
+        latestNomorAntrianPasien = result.val() === null ? 1 : result.val();
+        db1.db.ref('users/' + p).update({
+          flagActivity: 'antriKamarOperasi',
+          nomorAntrian: latestNomorAntrianPasien,
+          tanggalBooking: this.state.pilihTanggal,
+        });
+        db1.db.ref(`daftarTungguKamarOperasi/indexes/${Moment(this.state.pilihTanggal).format('YYYY-MM-DD')}`).update({
+          nomorAntrianPasien: latestNomorAntrianPasien + 1,
+        });
+        const a = db1.db.ref('daftarTungguKamarOperasi/byDates/').push();
+        db1.db.ref('daftarTungguKamarOperasi/byDates/' + a.key).update({
+          idAntrian: a.key,
+          uid: p,
+          namaAntrian: this.state.itemsPasien.namaLengkap,
+          nomorAntrian: latestNomorAntrianPasien,
+          poli: 'POLI1',
+          tanggalBooking: Moment(this.state.pilihTanggal).format('YYYY-MM-DD'),
+        });
+      });
     db1.db.ref('daftarTunggu/byDates/' + this.props.navigation.state.params.qey2.qeyAntrian).remove();
     this.props.navigation.navigate('HomeUserScreen');
   }
+
+  private async _onDateTap() {
+    try {
+      const {action, year, month, day} = await DatePickerAndroid.open({
+        // date: new Date(2020, 4, 25)
+        date: new Date(),
+      });
+      if (action !== DatePickerAndroid.dismissedAction) {
+        this.setState({ pilihTanggal : Moment(`${month + 1}/${day}/${year}`).format('YYYY-MM-DD'),
+        masukKamarOperasi : true,
+      });
+      }
+    } catch ({code, message}) {
+      console.warn('Cannot open date picker', message);
+    }
+  }
+
 
 }
 

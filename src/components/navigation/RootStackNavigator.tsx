@@ -25,6 +25,7 @@ import PasienRekamMedikByDokterScreen from '../screen/Dokter/PasienRekamMedikByD
 import DiagnosisResepObatScreen from '../screen/Dokter/DiagnosisObatResep';
 import CpListApotekBillingScreen from '../screen/Apotek/CpLListApotekBilling';
 import DetailApotekBillingScreen from '../screen/Apotek/DetailApotekBilling';
+import CpListPasienKamarOperasiScreen from '../screen/KamarOperasi/CpListPasienKamarOperasi';
 
 const UserBottomTabNavigator = createBottomTabNavigator(
   {
@@ -130,6 +131,10 @@ const routeConfig = {
   DetailApotekBillingScreen: {
     screen: DetailApotekBillingScreen,
     path: 'DetailApotekBillingScreen',
+  },
+  CpListPasienKamarOperasiScreen: {
+    screen: CpListPasienKamarOperasiScreen,
+    path: 'CpListPasienKamarOperasiScreen',
   },
 };
 
