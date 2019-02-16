@@ -78,7 +78,7 @@ class Screen extends Component<IProps, IState> {
         }
         </ScrollView>
         <View>
-          <Button mode='contained'
+          <Button style={{marginVertical: 10}} mode='contained'
             onPress={() => this.onNewData()}>
             Tambah
           </Button>

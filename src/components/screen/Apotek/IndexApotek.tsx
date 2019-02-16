@@ -84,7 +84,7 @@ const styles = StyleSheet.create<IStyle>({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    padding: 5,
+    padding: 10,
   },
   text: {
     fontSize: 20,

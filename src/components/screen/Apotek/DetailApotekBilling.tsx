@@ -17,7 +17,7 @@ import { Button, Headline, IconButton, Colors,
 
 import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
-import { auth, db } from '../../../firebase';
+// import { auth, db } from '../../../firebase';
 
 interface IProps {
   navigation?: any;
@@ -55,31 +55,38 @@ class Screen extends Component<IProps, IState> {
       <ScrollView>
         <View style={styles.container}>
           <View style={[{width: '100%'}, {marginTop: 10}]}>
-            { this.state.users.map( (el, key) =>
+            { !!this.state.users && this.state.users.map( (el, key) =>
               <View key={key}>
+                { el.statusApotekBilling === 'ApotekBillingNOK' &&
                 <Card style={[{margin: 10}]}>
                   <Card.Content>
                       <Subheading>Nama Pasien : { el.namaUser }</Subheading>
                       <Caption>Tanggal Periksa : { el.tanggalRekamMedik }</Caption>
                       <Caption>Nama Dokter Periksa : { el.namaDokter }</Caption>
-                      <Caption>Diag : { el.itemDiag }</Caption>
-                      <Caption>Obat : { el.itemObat }</Caption>
+                      <Caption>Diagnosa :</Caption>
+                      { !!el.itemDiag && JSON.parse(el.itemDiag).map((el1, key1) =>
+                        <View style={{marginLeft: 10}} key={key1}>
+                          <Caption>{el1.namaDiagnosa}</Caption>
+                          <Caption style={{marginLeft: 5}}>{el1.hargaDiagnosa}</Caption>
+                        </View>,
+                      ) }
+                      <Caption>Obat :</Caption>
+                      { !!el.itemObat && JSON.parse(el.itemObat).map((el1, key1) =>
+                        <View style={{marginLeft: 10}} key={key1}>
+                          <Caption>{el1.namaObat}</Caption>
+                          <Caption style={{marginLeft: 5}}>{el1.jumlahObat} - {el1.hargaJualObat}</Caption>
+                        </View>,
+                      ) }
                   </Card.Content>
                   <Card.Actions>
                     <Button mode='text'
-                      onPress={() => this.props.navigation.navigate('HomeUserScreen')}>
+                      onPress={() => this._onProsesObatDanPembayaran(el)}>
                       Proses Obat dan Pembayaran
                     </Button>
                   </Card.Actions>
-                </Card>
+                </Card>}
               </View>,
             )}
-          </View>
-          <View style={[{marginTop: 10}]}>
-            <Button mode='outlined'
-              onPress={() => this._onLogout()} >
-              Logout
-            </Button>
           </View>
         </View>
       </ScrollView>
@@ -92,14 +99,19 @@ class Screen extends Component<IProps, IState> {
       .equalTo(this.props.navigation.state.params.el.p.idPasien)
       .on('value', (result) => {
       const r1 = [];
-      // r1.push(result.val());
-      result.forEach(el => {
+      // r1.push(result.key());
+      // console.log(result.key);
+      result.forEach((el) => {
+        // console.log(el.key);
         r1.push({
+          idRekamMedikPasien: el.key,
+          idUser: el.val().idUser,
           namaUser: el.val().namaUser,
           namaDokter: el.val().namaDokter,
           tanggalRekamMedik: el.val().tanggalRekamMedik,
           itemDiag: el.val().itemDiag,
           itemObat: el.val().itemObat,
+          statusApotekBilling: el.val().statusApotekBilling,
         });
       });
       // console.log(r1);
@@ -110,10 +122,16 @@ class Screen extends Component<IProps, IState> {
     });
   }
 
-  private _onLogout = async () => {
-    await AsyncStorage.clear();
-    auth.doSignOut();
-    this.props.navigation.navigate('Auth');
+  private _onProsesObatDanPembayaran(p) {
+    db1.db.ref('users/' + p.idUser )
+      .update({
+        flagActivity: 'userIdle',
+      });
+    db1.db.ref('rekamMedik/' + p.idRekamMedikPasien)
+      .update({
+        statusApotekBilling: 'ApotekBillingOK',
+      });
+    this.props.navigation.navigate('HomeUserScreen');
   }
 
 }
