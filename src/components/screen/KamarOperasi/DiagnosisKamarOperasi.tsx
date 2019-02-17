@@ -20,9 +20,9 @@ import { observer } from 'mobx-react';
 import { inject } from 'mobx-react/native';
 import * as db1 from '../../../firebase/firebase';
 import Moment from 'moment';
-import ListObat from './ListObat';
-import { db } from 'src/firebase';
-import DaftarKamarOperasi from './DaftarKamarOperasi';
+// import ListObat from './ListObat';
+// import { db } from 'src/firebase';
+// import DaftarKamarOperasi from './DaftarKamarOperasi';
 
 interface IProps {
   navigation?: any;
@@ -50,7 +50,7 @@ interface IState {
 @inject('store') @observer
 class Screen extends Component<IProps, IState> {
   public static navigationOptions = {
-    title: 'Diagnosis + Resep / Obat',
+    title: 'Diagnosis Kamar Operasi',
   };
 
   constructor(props) {
@@ -155,17 +155,6 @@ class Screen extends Component<IProps, IState> {
                       Simpan Data
                     </Button>
                   </View>
-                  <View style={{marginTop: 5, flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                    <Button
-                      mode='outlined'
-                      onPress={() => this._onDateTap()}
-                    >
-                      Booking Kamar Operasi {this.state.pilihTanggal}
-                    </Button>
-                    {/* <Button mode='outlined' onPress={() => this._onSubmit()}>
-                      Booking
-                    </Button> */}
-                  </View>
                 </Card.Actions>
               </Card>
               <View style={styles.containerModal}>
@@ -214,7 +203,6 @@ class Screen extends Component<IProps, IState> {
     if (p !== null ) {
       await db1.db.ref('diagnosa' )
       .on('value', (snap) => {
-        // console.log(snap.val());
         const r1 = [];
         snap.forEach((snap2) => {
           r1.push({
@@ -223,7 +211,6 @@ class Screen extends Component<IProps, IState> {
             hargaDiagnosa: snap2.val().hargaDiagnosa,
           });
         });
-        // console.log(r1);
         this.setState({
           itemsDiag: r1,
         });
@@ -242,7 +229,6 @@ class Screen extends Component<IProps, IState> {
             jumlahObatKeluar: 1,
           });
         });
-        // console.log(r1);
         this.setState({
           itemsObat: rX1,
         });
@@ -252,7 +238,6 @@ class Screen extends Component<IProps, IState> {
       .on('value', (snapX3) => {
         const rX1 = [];
         rX1.push(snapX3.val());
-        // console.log(rX1);
         this.setState({
           itemsPercentage: rX1,
         });
@@ -271,7 +256,6 @@ class Screen extends Component<IProps, IState> {
             shareSarana: 0,
           });
         }
-        // console.log(rX1);
         this.setState({
           itemsPercentagePerUser: rX1,
         });
@@ -324,7 +308,6 @@ class Screen extends Component<IProps, IState> {
       idDokter : this.props.store.user.uid,
       namaDokter : this.props.store.user.userNamaLengkap,
       statusApotekBilling : 'ApotekBillingNOK',
-      statusKamarOperasi : this.state.masukKamarOperasi === true ? 'Operasi' + this.state.pilihTanggal : '-',
     });
     this.state.itemsObatTerpilih.forEach((el) => {
       const a = db1.db.ref('historyBarangKeluar').push();
@@ -377,63 +360,12 @@ class Screen extends Component<IProps, IState> {
                               parseInt( this.state.itemsPercentage[0].sarana, 10) / 100),
       });
     });
-    if (this.state.masukKamarOperasi === false) {
-      db1.db.ref('users/' + this.state.itemsPasien._id).update({
-        flagActivity: 'antriApotekBilling',
-      });
-    } else if (this.state.masukKamarOperasi === true) {
-      db1.db.ref('users/' + this.state.itemsPasien._id).update({
-        flagActivity: 'antriKamarOperasi',
-        bookingKamarOperasi: this.state.pilihTanggal,
-      });
-    }
-    if (this.state.masukKamarOperasi === true) {
-      const p = this.state.itemsPasien._id;
-      let latestNomorAntrianPasien = 0;
-      db1.db.ref(
-        `daftarTungguKamarOperasi/indexes/${Moment(this.state.pilihTanggal).format('YYYY-MM-DD')}/nomorAntrianPasien`)
-        .once('value', (result) => {
-          latestNomorAntrianPasien = result.val() === null ? 1 : result.val();
-          db1.db.ref('users/' + p).update({
-            flagActivity: 'antriKamarOperasi',
-            nomorAntrian: latestNomorAntrianPasien,
-            tanggalBooking: this.state.pilihTanggal,
-          });
-          db1.db.ref(
-            `daftarTungguKamarOperasi/indexes/${Moment(this.state.pilihTanggal).format('YYYY-MM-DD')}`).update({
-            nomorAntrianPasien: latestNomorAntrianPasien + 1,
-          });
-          const a = db1.db.ref('daftarTungguKamarOperasi/byDates/').push();
-          db1.db.ref('daftarTungguKamarOperasi/byDates/' + a.key).update({
-            idAntrian: a.key,
-            uid: p,
-            namaAntrian: this.state.itemsPasien.namaLengkap,
-            nomorAntrian: latestNomorAntrianPasien,
-            poli: 'POLI1',
-            tanggalBooking: Moment(this.state.pilihTanggal).format('YYYY-MM-DD'),
-          });
-        });
-      }
-    db1.db.ref('daftarTunggu/byDates/' + this.props.navigation.state.params.qey2.qeyAntrian).remove();
+    db1.db.ref('users/' + this.state.itemsPasien._id).update({
+      flagActivity: 'antriApotekBilling',
+    });
+    db1.db.ref('daftarTungguKamarOperasi/byDates/' + this.props.navigation.state.params.qey2.qeyAntrian).remove();
     this.props.navigation.navigate('HomeUserScreen');
   }
-
-  private async _onDateTap() {
-    try {
-      const {action, year, month, day} = await DatePickerAndroid.open({
-        // date: new Date(2020, 4, 25)
-        date: new Date(),
-      });
-      if (action !== DatePickerAndroid.dismissedAction) {
-        this.setState({ pilihTanggal : Moment(`${month + 1}/${day}/${year}`).format('YYYY-MM-DD'),
-        masukKamarOperasi : true,
-      });
-      }
-    } catch ({code, message}) {
-      console.warn('Cannot open date picker', message);
-    }
-  }
-
 
 }
 

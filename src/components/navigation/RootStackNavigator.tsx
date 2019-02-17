@@ -26,6 +26,8 @@ import DiagnosisResepObatScreen from '../screen/Dokter/DiagnosisObatResep';
 import CpListApotekBillingScreen from '../screen/Apotek/CpLListApotekBilling';
 import DetailApotekBillingScreen from '../screen/Apotek/DetailApotekBilling';
 import CpListPasienKamarOperasiScreen from '../screen/KamarOperasi/CpListPasienKamarOperasi';
+import PasienRekamMedikByKamarOperasiScreen from '../screen/KamarOperasi/PasienRekamMedikByKamarOperasi';
+import DiagnosisKamarOperasiScreen from '../screen/KamarOperasi/DiagnosisKamarOperasi';
 
 const UserBottomTabNavigator = createBottomTabNavigator(
   {
@@ -135,6 +137,14 @@ const routeConfig = {
   CpListPasienKamarOperasiScreen: {
     screen: CpListPasienKamarOperasiScreen,
     path: 'CpListPasienKamarOperasiScreen',
+  },
+  PasienRekamMedikByKamarOperasiScreen: {
+    screen: PasienRekamMedikByKamarOperasiScreen,
+    path: 'PasienRekamMedikByKamarOperasiScreen',
+  },
+  DiagnosisKamarOperasiScreen: {
+    screen: DiagnosisKamarOperasiScreen,
+    path: 'DiagnosisKamarOperasiScreen',
   },
 };
 

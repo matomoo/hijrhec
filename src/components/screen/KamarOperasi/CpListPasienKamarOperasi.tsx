@@ -110,6 +110,11 @@ class Screen extends Component<IProps, IState> {
         <Subheading>Poli : {item.poli}</Subheading>
         <Subheading>Tanggal Booking : {item.tanggalBooking}</Subheading>
       </Card.Content>
+      <Card.Actions>
+        <Button mode='outlined' onPress={() => this.onUpdateData(item)}>
+          Proses
+        </Button>
+      </Card.Actions>
     </Card>
   )
 
@@ -121,6 +126,7 @@ class Screen extends Component<IProps, IState> {
       snap.forEach((el) => {
         r1.push({
           uid : el.val().uid,
+          idAntrian: el.val().idAntrian,
           namaAntrian: el.val().namaAntrian,
           nomorAntrian: el.val().nomorAntrian,
           poli : el.val().poli,
@@ -133,6 +139,10 @@ class Screen extends Component<IProps, IState> {
       });
       this.arrayholder = r1;
     });
+  }
+
+  private onUpdateData(p) {
+    this.props.navigation.navigate('PasienRekamMedikByKamarOperasiScreen', {qey: {p}} );
   }
 
 }

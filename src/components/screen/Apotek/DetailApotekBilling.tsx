@@ -50,6 +50,10 @@ class Screen extends Component<IProps, IState> {
     this.getFirstData(this.taskUser);
   }
 
+  public componentWillUnmount() {
+    this.taskUser.off();
+  }
+
   public render() {
     return (
       <ScrollView>
@@ -99,10 +103,7 @@ class Screen extends Component<IProps, IState> {
       .equalTo(this.props.navigation.state.params.el.p.idPasien)
       .on('value', (result) => {
       const r1 = [];
-      // r1.push(result.key());
-      // console.log(result.key);
       result.forEach((el) => {
-        // console.log(el.key);
         r1.push({
           idRekamMedikPasien: el.key,
           idUser: el.val().idUser,
@@ -114,7 +115,6 @@ class Screen extends Component<IProps, IState> {
           statusApotekBilling: el.val().statusApotekBilling,
         });
       });
-      // console.log(r1);
       this.setState({
         users: r1,
         isLoaded: false,
