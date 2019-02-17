@@ -434,7 +434,6 @@ class Screen extends Component<IProps, IState> {
     }
   }
 
-
 }
 
 export default Screen;

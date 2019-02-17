@@ -16,7 +16,7 @@ import UserChangePwdScreen from '../screen/Users/UserChangePwd';
 import UserDaftarAntrianDetailScreen from '../screen/Users/UserDaftarAntrianDetail';
 import InputItemDiagnosisScreen from '../screen/Resepsionis/InputItemDiagnosis';
 import InputItemObatScreen from '../screen/Apotek/InputItemObat';
-import InputShareOfPercentage from '../screen/Manajemen/InputShareOfPercentage';
+import InputShareOfPercentageScreen from '../screen/Manajemen/InputShareOfPercentage';
 import CpListDiagnosisScreen from '../screen/Resepsionis/CpListDiagnosis';
 import CpListDaftarAntrianScreen from '../screen/Resepsionis/CpListDaftarAntrian';
 import CpListObatScreen from '../screen/Apotek/CpListObat';
@@ -28,6 +28,7 @@ import DetailApotekBillingScreen from '../screen/Apotek/DetailApotekBilling';
 import CpListPasienKamarOperasiScreen from '../screen/KamarOperasi/CpListPasienKamarOperasi';
 import PasienRekamMedikByKamarOperasiScreen from '../screen/KamarOperasi/PasienRekamMedikByKamarOperasi';
 import DiagnosisKamarOperasiScreen from '../screen/KamarOperasi/DiagnosisKamarOperasi';
+import LaporanBarangMasukScreen from '../screen/Manajemen/LaporanBarangMasuk';
 
 const UserBottomTabNavigator = createBottomTabNavigator(
   {
@@ -98,9 +99,9 @@ const routeConfig = {
     screen: InputItemObatScreen,
     path: 'InputItemObatScreen',
   },
-  InputShareOfPercentage: {
-    screen: InputShareOfPercentage,
-    path: 'InputShareOfPercentage',
+  InputShareOfPercentageScreen: {
+    screen: InputShareOfPercentageScreen,
+    path: 'InputShareOfPercentageScreen',
   },
   CpListDiagnosisScreen: {
     screen: CpListDiagnosisScreen,
@@ -145,6 +146,10 @@ const routeConfig = {
   DiagnosisKamarOperasiScreen: {
     screen: DiagnosisKamarOperasiScreen,
     path: 'DiagnosisKamarOperasiScreen',
+  },
+  LaporanBarangMasukScreen: {
+    screen: LaporanBarangMasukScreen,
+    path: 'LaporanBarangMasukScreen',
   },
 };
 

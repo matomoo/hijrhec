@@ -19,6 +19,7 @@ import IndexApotek from '../screen/Apotek/IndexApotek';
 import InputShareOfPercentage from '../screen/Manajemen/InputShareOfPercentage';
 import IndexDokter from '../screen/Dokter/IndexDokter';
 import IndexKamarOperasi from '../screen/KamarOperasi/IndexKamarOperasi';
+import IndexManajemen from '../screen/Manajemen/IndexManajemen';
 
 interface IProps {
   navigation?: any;
@@ -60,7 +61,7 @@ class Screen extends Component<IProps, IState> {
             <IndexKamarOperasi navigation={ this.props.navigation } />
         }
         { this.props.store.user.userRole === 'manajemen' &&
-            <InputShareOfPercentage navigation={ this.props.navigation } />
+            <IndexManajemen navigation={ this.props.navigation } />
         }
         { this.props.store.user.userRole === 'dokter' &&
             <IndexDokter navigation={ this.props.navigation } />
